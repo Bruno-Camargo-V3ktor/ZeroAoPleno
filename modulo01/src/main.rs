@@ -85,7 +85,7 @@ fn main() {
     let mut index = 1;
     while index <= qtd_alunos {
         let media = read_int();
-        resultados[index as usize] =  format!("{}º Aluno - {}", index, { if media >= 6 { "Passou" } else { "Reprovou" } } );
+        resultados[ (index-1) as usize ] =  format!("{}º Aluno - {}", index, { if media >= 6 { "Passou" } else { "Reprovou" } } );
         index += 1;
     }
 
@@ -93,7 +93,66 @@ fn main() {
 
     // -----------------------------------------------------
 
+    println!("\nCalcuradora Maior Divisor Comum");
+
+    print( "Primeiro numero: " );
+    let input_num1 = read_int();
+
+    print( "Segundo numero: " );
+    let input_num2 = read_int();
+
+    let mut divisor = 1;
+    let mut maior_divisor = divisor;
+    loop {
+
+        if (input_num1 < divisor ) || (input_num2 < divisor) { break; }
+
+        if input_num1 == input_num2 {
+            maior_divisor = input_num1;
+            break;
+        }
+
+        if (input_num1 % divisor == 0 ) && (input_num2 % divisor == 0) { maior_divisor = divisor; }
+
+        divisor += 1;
+    }
+
+    println!( "O maior divisor comum entre {} e {} = {}", input_num1, input_num2, maior_divisor );
+
+    // -----------------------------------------------------
+
+    println!( "O dobro do numero 5 eh {}", dobro(5) );
+    println!( "O maior numero entre 10 e 5 eh {}", maior(10, 5) );
+
+    // -----------------------------------------------------
+
+    let animais = vec!["Coelho", "Gamba", "Macaco"];
+
+    for n in 1..5 {
+        println!( "{}", n )
+    }
+
+    for n in 10..=20 {
+        println!( "{}", n )
+    }
+
+    for animal in animais {
+        println!( "animal: {}", animal )
+    }
+
 }
+
+
+fn dobro( num: i32 ) -> i32 { 2*num }
+
+fn maior(a: i32, b: i32) -> i32 {
+    {
+        if a >= b { a }
+        else { b }
+    }
+}
+
+// -----------------------------------------------------
 
 fn convert_to_int( data_input: &String ) -> i32 {
     data_input
