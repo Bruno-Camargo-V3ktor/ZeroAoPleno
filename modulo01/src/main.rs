@@ -1,6 +1,6 @@
 
 use std::io;
-use std::io::{BufRead, Write};
+use std::io::{stdin, BufRead, Write};
 use std::ptr::read;
 
 fn main() {
@@ -140,8 +140,153 @@ fn main() {
         println!( "animal: {}", animal )
     }
 
+    // -----------------------------------------------------
+
+    let numeros = vec![10, 2, 3, 41, 34];
+    let maior = encontar_maior_numero( numeros.clone() );
+    println!( "maior numero: {:?}", maior );
+
+    // -----------------------------------------------------
+
+    println!( "2 eh primo? {}", eh_primo( 2 ) );
+
+    // -----------------------------------------------------
+
+    print( "Qual numero que gerar a tabuada: " );
+    gerar_tabuada( read_int() as u32 );
+
+    // -----------------------------------------------------
+
+    let mut numero_em_string = String::new();
+
+    print( "--> " );
+    stdin().read_line( &mut numero_em_string ).expect("Falha ao ler a linha");
+    println!( "Soma dos numeros pares: {}", soma_numeros_pares_em_str( &numero_em_string ) );
+
+    // -----------------------------------------------------
+
+    let notas: [u8; 5] = [6, 8, 3, 5, 6];
+    println!( "notas: {:?} || media: {}", notas, calcular_media( &notas ) );
+
+    // -----------------------------------------------------
+
+    println!( "A str 'Bruno' tem caracteres unicos? {}", tem_caracteres_unicos( "Bruno" ) );
+    println!( "A str 'Casa' tem caracteres unicos? {}", tem_caracteres_unicos( "Casa" ) );
+
+    // -----------------------------------------------------
+
+
+    println!( " 'abc' eh permutacao 'cab'? {}", eh_permutacao( "abc", "cab" ) );
+    println!( " 'abc' eh permutacao 'def'? {}", eh_permutacao( "abc", "def" ) );
+
+    // -----------------------------------------------------
+
+    println!( " '121' eh palindromo ? {}", eh_palindromo( 121 ) );
+    println!( " '10' eh palindromo ? {}", eh_palindromo( 10 ) );
+
+    // -----------------------------------------------------
+
 }
 
+fn eh_palindromo( num: i32 ) -> bool {
+
+    let em_texto = num.to_string();
+    let invertido = em_texto.chars().rev().collect::<String>();
+
+    num == convert_to_int( &invertido )
+}
+
+fn eh_permutacao( a: &str, b: &str ) -> bool {
+
+    if ( a.len() <= 0 ) || ( b.len() <= 0 ) { return false; }
+    if a.len() != b.len() { return false; }
+
+    let mut historico: Vec<usize> = vec![];
+    for c in a.chars() {
+
+        let igual = {
+
+            let mut mtc = false;
+
+            for i in 0..b.len() {
+
+                if ( c == b.chars().nth(i).unwrap() ) && (!historico.contains(&i)) {
+                    mtc = true;
+                    historico.push(i);
+                    break;
+                }
+            }
+
+            mtc
+        };
+
+        if !igual { return false; }
+
+    }
+
+    true
+}
+
+fn tem_caracteres_unicos( input: &str ) -> bool {
+    let mut caracteres = vec![];
+
+    for c in input.chars() {
+        if caracteres.contains( &c ) { return false; }
+        caracteres.push(c);
+    }
+
+    return true;
+}
+
+fn calcular_media( notas: &[u8] ) -> u8 {
+
+    let mut soma = 0;
+
+    for nota in notas {
+        soma += nota;
+    }
+
+    soma / notas.len() as u8
+}
+
+fn soma_numeros_pares_em_str( text: &String ) -> i32 {
+    let mut total = 0;
+
+    for c in text.chars() {
+        let num = convert_to_int( &c.to_string() );
+        if ( num != 0 ) && ( num % 2 == 0 ) { total += num; }
+    }
+
+    total
+}
+
+fn gerar_tabuada( num: u32 ) {
+
+    for n in 1..=10 {
+        println!( " {} * {} = {}", num, n, num * n )
+    }
+
+}
+
+fn eh_primo( num: u32 ) -> bool {
+    if num == 1 { return false }
+
+    for n in 2..=num {
+        if ( num % n == 0 ) && (num != n) { return false }
+    }
+
+    true
+}
+
+fn encontar_maior_numero( nums: Vec< usize > ) -> Option< usize > {
+    let mut maior = *nums.get( 0 ).unwrap_or_else( || { return &0 } );
+
+    for num in nums {
+        if num > maior { maior = num }
+    }
+
+    Some(maior)
+}
 
 fn dobro( num: i32 ) -> i32 { 2*num }
 
