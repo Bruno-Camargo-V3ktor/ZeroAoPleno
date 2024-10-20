@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+use std::ops::Deref;
 
 enum Direction {
     Up,
@@ -28,6 +30,14 @@ enum Pagamento {
     Pix(f32),
     Parcelado(f32, u8)
 }
+
+
+// -- Constantes:
+const NUMERO_PI: f32 = 3.14;
+
+
+// -- VARIAVEIS STATICAS :
+static mut STATIC_VARIAVEL: i32 = 15;
 
 fn main() {
 
@@ -95,6 +105,65 @@ fn main() {
     // -----------------------------------------
 
 
+    // -- Constantes :
+
+    println!( "A circuferencia de raio 2 possui comprimento de {}", comprimento_circuferencia(2.0) );
+
+    // -----------------------------------------
+
+
+    // -- Bloco de Codigos :
+
+    let a = 10;
+
+    let c = {
+        println!( "{}", a );
+
+        let a = 20;
+        let b = 15;
+
+        println!( "{}", a );
+
+        b > a
+    };
+
+    println!( "{}", a );
+    println!( "b maior que a? {}", c );
+
+    // -----------------------------------------
+
+
+    // -- Variaveis Staticas :
+
+    unsafe {
+        println!( "O valor de STATIC_VARIAVEL = {}", STATIC_VARIAVEL );
+    }
+
+    // -----------------------------------------
+
+
+    // -- Referencias :
+
+    let mut x = 10;
+    let y = &mut x;
+
+    *y += 1;
+
+    println!( "{}", y );
+    println!( "{}", x );
+
+    // -----------------------------------------
+
+
+}
+
+fn update_value( x: &i32, y: &mut i32 ) {
+    *y = x + 10;
+}
+
+fn comprimento_circuferencia(r: f32) -> f32 {
+    let c = 2.0 * r * NUMERO_PI;
+    c
 }
 
 fn nacionalidade_carro( car: CarModel ) {
