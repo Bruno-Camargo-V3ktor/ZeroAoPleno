@@ -39,6 +39,16 @@ const NUMERO_PI: f32 = 3.14;
 // -- VARIAVEIS STATICAS :
 static mut STATIC_VARIAVEL: i32 = 15;
 
+// -- Estruturas ( Struct ) :
+
+#[ derive( Debug ) ]
+struct User {
+    username: String,
+    email: String,
+    active: bool,
+    gender: Gender,
+}
+
 fn main() {
 
     // -- Tuplas:
@@ -154,7 +164,112 @@ fn main() {
 
     // -----------------------------------------
 
+    // -- Estruturas ( Struct ) :
 
+    let mut pessoa = User {
+        username : String::from( "V3ktor" ),
+        email : String::from( "v3ktoryt@gmail.com" ),
+        active : true,
+        gender: Gender::Male
+    };
+
+    println!( "{:?}", pessoa );
+    println!( " Nome de usuario: {} ", pessoa.username );
+
+    pessoa.active = false;
+
+    // -----------------------------------------
+
+    // -- String ( Coleção )
+
+    let mut minhaString = String::from("Olá meu nome é bruno");
+
+    println!( "O tamnho da string eh {}", minhaString.len() );
+    println!( "A string ta vazia? {}", minhaString.is_empty() );
+
+    for token in minhaString.split_whitespace() {
+        println!( "{}", token );
+    }
+
+    println!( "O nome bruno esta contido na string? {}", minhaString.contains("bruno") );
+
+        // Tem que ser mutavel
+    minhaString.push_str(", Bem vindo.");
+
+    // -----------------------------------------
+
+    // -- Tarefa Reversão de String:
+
+    println!( "A string 'bruno' ao contraria eh {}", reverse_string( &String::from("bruno") ) );
+
+    // -----------------------------------------
+
+    // -- Tarefa Anagrama de String:
+
+    println!( "A string 'roma' eh anagrama de 'amor' {}", is_anagram( &String::from("amor"), &String::from("roma") ) );
+    println!( "A string 'amor' eh anagrama de 'amor' {}", is_anagram( &String::from("amor"), &String::from("amor") ) );
+    println!( "A string 'tres' eh anagrama de 'amor' {}", is_anagram( &String::from("amor"), &String::from("tres") ) );
+
+    // -----------------------------------------
+
+    // -- Tarefa Palíndromo:
+
+    println!( "A string 'ovo' eh palindromo ? {}", eh_palindromo( &String::from("ovo") ) );
+    println!( "A string 'radar' eh palindromo ? {}", eh_palindromo( &String::from("radar") ) );
+    println!( "A string 'bruno' eh palindromo ? {}", eh_palindromo( &String::from("bruno") ) );
+
+    println!( "A string 'A dama admirou o rim da amada.' eh palindromo ? {}", eh_palindromo( &String::from("A dama admirou o rim da amada.") ) );
+
+    // -----------------------------------------
+
+    // -- Pass by Reference:
+
+    let user1 = User{
+        username: String::from( "Amanda" ),
+        email: String::from( "amanda@email.com" ),
+        gender: Gender::Female,
+        active: true
+    };
+
+    print_username( &user1 );
+
+    // -----------------------------------------
+
+
+}
+
+fn eh_palindromo( input: &String ) -> bool {
+
+    let new_text = input.chars().filter( |c| -> bool {
+        !c.is_ascii_punctuation() && !c.is_ascii_whitespace()
+    } ).collect::<String>().to_lowercase();
+
+    let rev_text = new_text.chars().rev().collect::<String>();
+
+    new_text == rev_text
+}
+
+fn is_anagram( a: &String, b: &String ) -> bool {
+
+    if ( a.to_lowercase() == b.to_lowercase() ) || (a.len() != b.len()) { return false }
+
+    let mut a_chars = a.chars().collect::< Vec<char> >();
+    let mut b_chars = b.chars().collect::< Vec<char> >();
+
+    a_chars.sort();
+    b_chars.sort();
+
+    a_chars == b_chars
+}
+
+fn reverse_string( input: &String ) -> String {
+    input.chars().rev().collect::<String>()
+}
+
+// -----------------------------------------
+
+fn print_username( user: &User ) {
+    println!( "Username: {}", user.username );
 }
 
 fn update_value( x: &i32, y: &mut i32 ) {
