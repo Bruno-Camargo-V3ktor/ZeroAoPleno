@@ -49,6 +49,23 @@ struct User {
     gender: Gender,
 }
 
+//             Nome,  Email,  Idade, Altura, Peso, Genero
+struct People( String, String, u8, f32, f32, Gender );
+
+// -- Implementantion:
+
+impl User {
+
+    fn nome_do_usuario(&self) {
+        println!( "O nome do usuario eh {}", self.username );
+    }
+
+    fn esta_ativo(&self) {
+        println!( "O usuario esta ativo? {}", self.active );
+    }
+
+}
+
 fn main() {
 
     // -- Tuplas:
@@ -235,6 +252,99 @@ fn main() {
 
     // -----------------------------------------
 
+    // -- Tuple Structs:
+
+    let pessoa = People(
+        String::from( "Bruno" ),
+        String::from( "bruno@email.com" ),
+        18,
+        1.70,
+        87.9,
+        Gender::Male
+    );
+
+    println!( "\nNome: {}", pessoa.0 );
+    println!( "Email: {}", pessoa.1 );
+    println!( "Idade: {}", pessoa.2 );
+    println!( "Altura: {}", pessoa.3 );
+    println!( "Peso: {}", pessoa.4 );
+    println!( "Genero: {:?}", pessoa.5 );
+
+
+    // -----------------------------------------
+
+
+    // -- Arrays:
+
+    let numeros_inteiros = [1, 2, 3, 4, 5];
+    println!( "\n{}", numeros_inteiros[0] );
+    println!( "{:?}", numeros_inteiros );
+
+    for i in 0..numeros_inteiros.len() {
+        println!( "{}", numeros_inteiros[i] );
+    }
+
+    for num in numeros_inteiros {
+        println!( "{}", num );
+    }
+
+
+    // -----------------------------------------
+
+
+    // -- Tarefa Rotação de Array:
+
+    let mut array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    println!( "\nAntes de rotacionar: {:?}", array );
+
+    //rotacionar_array( &mut array, 3 );
+    rotation_array( &mut array, 4 );
+
+    println!( "Depois de rotacionar: {:?}", array );
+
+    // -----------------------------------------
+
+
+    // -- Implementantion:
+
+    let user = User{
+        username: String::from( "Amanda" ),
+        email: String::from( "amanda@email.com" ),
+        gender: Gender::Female,
+        active: true
+    };
+
+    user.nome_do_usuario();
+    user.esta_ativo();
+
+    // -----------------------------------------
+
+}
+
+fn rotation_array( origin: &mut [i32], destination: usize ) {
+
+    if ( origin.len() < destination ) || ( origin.is_empty() ) { return }
+    origin[0..destination].reverse();
+
+}
+
+fn rotacionar_array( origin: &mut [i32], destination: usize ) {
+
+    if ( origin.len() < destination ) || ( origin.is_empty() ) { return }
+
+    let mut index_d = destination - 1;
+    for index_o in 0..origin.len() {
+        if index_o >= index_d  { break }
+
+        let value_o = origin[ index_o ];
+        let value_d = origin[ index_d ];
+
+        origin[index_o] = value_d;
+        origin[index_d] = value_o;
+
+        index_d -= 1;
+    }
 
 }
 
