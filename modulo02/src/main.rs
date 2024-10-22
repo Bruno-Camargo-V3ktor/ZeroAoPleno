@@ -320,6 +320,51 @@ fn main() {
 
     // -----------------------------------------
 
+
+    // -- Vetores:
+
+    let vetor1 = vec![1, 2, 3, 4];
+    let mut vetor2: Vec<i32> = Vec::new();
+
+
+    println!( "\n{}", vetor1[0] );
+    println!( "{}", vetor1.get(1).unwrap() );
+    println!( "{}", vetor1[2] );
+    println!( "{}", vetor1.get(3).unwrap() );
+
+    vetor2.push(10);
+    vetor2.push(20);
+    vetor2.push(30);
+    vetor2.push(40);
+
+    vetor2.remove(3);
+
+    println!( "\n{:?}", vetor2 );
+
+
+    // -----------------------------------------
+
+
+    // -- Tarefa Encontrar k-esimo Maior:
+
+    let valores = vec![12, 3, 124, 5, 44, 3, 9, 2, 7, 5];
+
+    println!( "\nO primeiro maior do vetor eh {}", encontrar_kesimo_maior( &valores, 1 ) );
+    println!( "O segundo maior do vetor eh {}", encontrar_kesimo_maior( &valores, 2 ) );
+    println!( "O terceiro maior do vetor eh {}", encontrar_kesimo_maior( &valores, 3 ) );
+    println!( "Valores: {:?}", valores );
+
+    // -----------------------------------------
+
+}
+
+fn encontrar_kesimo_maior( nums: &Vec<i32>, k: i32 ) -> i32 {
+
+    let mut copy = nums.clone();
+    copy.sort();
+    copy.reverse();
+
+    copy[ (k - 1) as usize ]
 }
 
 fn rotation_array( origin: &mut [i32], destination: usize ) {
