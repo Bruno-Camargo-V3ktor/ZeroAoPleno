@@ -422,6 +422,223 @@ fn main() {
 
     // -----------------------------------------
 
+
+    // -- Tarefa: Construção de Strings
+
+    let (ransomNote, magazine) = ("a", "b");
+    println!( "\nransomNote = '{}', magazine = '{}' ? {} ", ransomNote, magazine, construcao_de_string(ransomNote, magazine) );
+
+    let (ransomNote, magazine) = ("aa", "ab");
+    println!( "ransomNote = '{}', magazine = '{}' ? {} ", ransomNote, magazine, can_construct(ransomNote, magazine) );
+
+    let (ransomNote, magazine) = ("aa", "aab");
+    println!( "ransomNote = '{}', magazine = '{}' ? {} ", ransomNote, magazine, construcao_de_string(ransomNote, magazine) );
+
+    // -----------------------------------------
+
+
+    // -- Tarefa:  Verificação de Padrão de Palavras
+
+    let pattern1 = "abba";
+    let str1 = "dog cat cat dog";
+    println!("\nSegue o padrão: {}", word_pattern(pattern1, str1)); // Saída: true
+
+    let pattern2 = "abba";
+    let str2 = "dog cat cat fish";
+    println!("Segue o padrão: {}", identificar_padrao(pattern2, str2)); // Saída: false
+
+    let pattern3 = "aaaa";
+    let str3 = "cat cat cat cat";
+    println!("Segue o padrão: {}", identificar_padrao(pattern3, str3)); // Saída: false
+
+    let pattern4 = "abba";
+    let str4 = "dog dog dog dog";
+    println!("Segue o padrão: {}", identificar_padrao(pattern4, str4)); //
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Intersecção de Dois Vetores
+
+    let (nums1, nums2) = (vec![1, 2, 2, 1], vec![2, 2]);
+    println!( "\nInterseccao de {:?} e {:?}: {:?}", nums1, nums2, calcular_intersecao(&nums1, &nums2) );
+
+    let (nums1, nums2) = (vec![1, 3, 2, 1], vec![2, 3]);
+    println!( "\nInterseccao de {:?} e {:?}: {:?}", nums1, nums2, intersecao(&nums1, &nums2) );
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Encontrar a Soma Mais Próxima
+
+    let nums = vec![-1, 2, 1, -4, 4];
+    let target = 1;
+
+    let result = three_sum_closest(nums, target);
+
+    println!("\nA soma mais próxima do alvo é: {}", result);
+
+    // -----------------------------------------
+
+}
+
+fn three_sum_closest(nums: Vec<i32>, target: i32) -> i32 {
+    if nums.len() < 3 { return 0; }
+    let mut results: HashSet<i32> = HashSet::new();
+
+
+    for start in 0..nums.len() {
+
+        let end = start + 2;
+        if end > ( nums.len()-1 ) { break; }
+
+        let res: i32 = nums[start..end+1].iter().sum();
+        results.insert( res );
+
+    }
+
+    let mut res = *results.iter().min().unwrap();
+    for &num in results.iter() {
+        if num == target { return num; }
+
+        let last_dif = ( res - target ).abs();
+        let dif = ( num - target ).abs();
+
+        if dif <= last_dif  { res = num }
+    }
+
+    res
+}
+
+fn intersecao(nums1: &Vec<i32>, nums2: &Vec<i32>) -> Vec<i32> {
+    // Converte os arrays para HashSet para busca eficiente
+    let conjunto1: HashSet<_> = nums1.into_iter().collect();
+    let conjunto2: HashSet<_> = nums2.into_iter().collect();
+
+    // Utiliza o método intersection em HashSet para encontrar elementos comuns
+    let resultado: Vec<_> = conjunto1.intersection(&conjunto2).cloned().collect();
+
+    resultado.iter().map( |x| **x ).collect()
+}
+
+fn calcular_intersecao( vec1: &Vec<i32>, vec2: &Vec<i32> ) -> Vec< i32 > {
+
+    let qtd = {
+        if vec1.len() < vec2.len() { vec1.len() }
+        else { vec2.len() }
+    };
+
+    let mut intersecao: HashSet< i32 > = HashSet::new();
+
+    for i in 0..qtd{
+
+        let num = vec1[i];
+        if vec2.contains(&num) {
+            intersecao.insert( num );
+        }
+
+    }
+
+    intersecao.iter().map( |x| *x ).collect()
+}
+
+fn word_pattern(pattern: &str, str_val: &str) -> bool {
+
+    let pattern_chars: Vec<char> = pattern.chars().collect();
+    let words: Vec<&str> = str_val.split_whitespace().collect();
+
+    if pattern_chars.len() != words.len() { return false; }
+
+    let mut char_to_word = HashMap::new();
+    let mut word_to_char = HashMap::new();
+    let mut used_words = HashSet::new();
+
+    for (i, &ch) in pattern_chars.iter().enumerate() {
+        match (char_to_word.get(&ch), word_to_char.get(&words[i])) {
+            (Some(&word), Some(&character)) => {
+                if word != words[i] || character != ch {
+                    return false;
+                }
+            }
+            (None, None) => {
+                char_to_word.insert(ch, words[i]);
+                word_to_char.insert(words[i], ch);
+                used_words.insert(words[i]);
+            }
+            _ => return false,
+        }
+    }
+
+    // Check if each character corresponds to a unique word and vice versa
+    char_to_word.len() == used_words.len() && word_to_char.len() == used_words.len()
+}
+
+fn identificar_padrao( pattern: &str, input: &str ) -> bool {
+
+    let mut configuracao:HashMap<char, &str> = HashMap::new();
+    let palavras = input.split(" ").collect::< HashSet<&str>>();
+    let padroes = pattern.chars().collect::< HashSet<char> >();
+
+    if ( palavras.len() != padroes.len() ) { return false }
+
+    for i in 0..palavras.len() {
+        let words = palavras.iter().collect::< Vec<&&str> >();
+        let chs = padroes.iter().collect::< Vec<&char> >();
+
+        let p = **words.get(i).unwrap();
+        let c = **chs.get(i).unwrap();
+
+        configuracao.insert( c, p );
+    }
+
+    let mut text = String::new();
+    for ch in pattern.chars() {
+        let &palavra = configuracao.get( &ch ).unwrap();
+        text.push_str( &palavra );
+        text.push(' ');
+    }
+
+    text.trim() == input
+}
+
+fn can_construct(ransom_note: &str, magazine: &str) -> bool {
+    let mut magazine_chars = HashMap::new();
+
+    // Contagem de caracteres na revista
+    for ch in magazine.chars() {
+        *magazine_chars.entry(ch).or_insert(0) += 1;
+    }
+
+    // Verificação da construção da nota de resgate
+    for ch in ransom_note.chars() {
+        if let Some(count) = magazine_chars.get_mut(&ch) {
+            if *count == 0 {
+                return false; // Não há caracteres suficientes na revista
+            }
+            *count -= 1;
+        } else {
+            return false; // Caractere não encontrado na revista
+        }
+    }
+
+    true
+}
+
+fn construcao_de_string( ransomNote: &str, magazine: &str ) -> bool {
+
+    if ( ransomNote.is_empty() || magazine.is_empty() ) || magazine.len() > 105 { return false }
+    let mut caracteres_restantes = ransomNote.chars().collect::<Vec<char>>();
+
+    for c in magazine.chars() {
+
+        if caracteres_restantes.contains( &c ) {
+            let i = caracteres_restantes.iter().position( | x | *x == c ).unwrap();
+            caracteres_restantes.remove(i);
+        }
+
+    }
+
+    caracteres_restantes.is_empty()
 }
 
 fn contains_duplicates( input: &Vec<i32> ) -> bool {
