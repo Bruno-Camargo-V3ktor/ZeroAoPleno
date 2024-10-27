@@ -1,6 +1,13 @@
+mod coin;
+mod block;
+mod bank;
+
 use std::collections::{HashMap, HashSet};
 use std::f32::consts::PI;
 use std::ops::Deref;
+use coin::Coin;
+use block::Block;
+use crate::bank::{Account, Currency};
 
 enum Direction {
     Up,
@@ -63,6 +70,55 @@ impl User {
 
     fn esta_ativo(&self) {
         println!( "O usuario esta ativo? {}", self.active );
+    }
+
+}
+
+
+enum Asset {
+    Stocks,
+    Bonds,
+    Funds,
+    Cash
+}
+
+impl Asset {
+    fn price(&self) -> f32 {
+        match self {
+            Asset::Stocks => 10.0,
+            Asset::Bonds => 20.0,
+            Asset::Funds => 30.0,
+            Asset::Cash => 40.0
+        }
+    }
+}
+
+struct Produto {
+    nome: String,
+    preco: f32,
+    quantidade: u16
+}
+
+impl Produto {
+
+    fn new(nome: &str, preco: f32, quantidade: u16) -> Self {
+        Self { nome: String::from(nome), preco, quantidade }
+    }
+
+    fn set_nome(&mut self, nome: &str) {
+        self.nome = String::from(nome);
+    }
+
+    fn set_preco(&mut self, preco: f32) {
+        self.preco = preco;
+    }
+
+    fn set_quantidade(&mut self, quantidade: u16) {
+        self.quantidade = quantidade;
+    }
+
+    fn debug(&self) {
+        println!( "(Nome: {}, Preco: {}, Quantidade: {})", self.nome, self.preco, self.quantidade );
     }
 
 }
@@ -480,6 +536,129 @@ fn main() {
 
     // -----------------------------------------
 
+
+    // -- Tarefa: Todos os Subsets
+
+    let nums = vec![1,2,3,4,5];
+    println!( "\nSubconjubtos de {:?} -> {:?}", nums, subconjuntos(&nums) );
+
+    let nums = vec![0];
+    println!( "Subconjubtos de {:?} -> {:?}", nums.clone(), subsets(nums) );
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Contando as letras maiúsculas em uma string
+
+    let texto = String::from("Contando as Letras Maiúsculas Em Uma String");
+    println!( "\nQuantidade de letras maisculas: {}", conta_maiusculas( &texto ) );
+
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Criar um Programa de Portfólio para o Mercado Financeiro.
+
+    let portifolio = [Asset::Stocks, Asset::Bonds, Asset::Cash, Asset::Funds];
+    let total: f32 = portifolio.iter().map( | x | x.price() ).sum();
+
+    println!("\nO valor total de seu portfólio é de R$ {}.", total);
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Criando uma moeda
+
+    let mut dogcoin = Coin::new( 10.45 );
+    println!( "\nDogcoin esta valendo: {}", dogcoin.get_value() );
+    dogcoin.set_value( 0.45 );
+    println!( "Dogcoin esta valendo: {}", dogcoin.get_value() );
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Criando structs e implementando métodos
+
+    let mut produto1 = Produto::new( "Iphone 11", 2500.00, 10 );
+    produto1.debug();
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Implementação de um Block struct para uma blockchain
+
+    let my_block = Block::new(0, 1605991464000, "dados do bloco".to_string(),  "hash".to_string()  , "hash anterior".to_string());
+    let size = my_block.data_size();
+    let time = my_block.creation_time();
+    println!("\nO tamanho do dado do bloco é: {} e foi criado em: {} segundos", size, time);
+
+    // -----------------------------------------
+
+
+    // -- Tarefa: Implementação de uma conta bancaria
+
+    let mut conta = Account::new( Currency::USD, 100.0 );
+    println!( "\nSaldo inicial: {}", conta.check_balance() );
+
+    conta.deposit( 50.0 );
+    println!( "Saldo apos deposito: {}", conta.check_balance() );
+
+    println!( "Saldo convertido em BRL: {}", conta.convert_to( Currency::BRL ) )
+
+    // -----------------------------------------
+
+}
+
+fn conta_maiusculas( input: &String ) -> u32 {
+    let mut qtd = 0;
+    for ch in input.chars() { if ch.is_uppercase() { qtd += 1; } }
+    qtd
+}
+
+fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+    let mut resultado = Vec::new();
+    let mut subset_atual = Vec::new();
+
+    fn backtrack(nums: &Vec<i32>, inicio: usize, subset_atual: &mut Vec<i32>, resultado: &mut Vec<Vec<i32>>) {
+        resultado.push(subset_atual.clone());
+
+        for i in inicio..nums.len() {
+            subset_atual.push(nums[i]);
+            backtrack(nums, i + 1, subset_atual, resultado);
+            subset_atual.pop();
+        }
+    }
+
+    backtrack(&nums, 0, &mut subset_atual, &mut resultado);
+    resultado
+}
+
+
+fn subconjuntos( array: &Vec< i32 > ) -> Vec< Vec< i32 > > {
+    if (array.len() <= 0) || (array.len() > 10)  { return vec![ vec![] ] }
+
+    let mut subconjuntos: HashSet< Vec<i32> > = HashSet::new();
+    subconjuntos.insert( vec![] );
+
+    if array.len() > 1 {
+        subconjuntos.insert( vec![ *array.first().unwrap(),  *array.last().unwrap() ] );
+    }
+
+    for i in 0..array.len() {
+
+        let start = i;
+        let mut end = start+1;
+
+        while end <= array.len() {
+            subconjuntos.insert( array[start..end].to_vec() );
+            end += 1;
+        }
+
+    }
+
+    let mut res: Vec<_> = subconjuntos.iter().map( |x| x.clone() ).collect();
+    res.sort();
+    res
 }
 
 fn three_sum_closest(nums: Vec<i32>, target: i32) -> i32 {
