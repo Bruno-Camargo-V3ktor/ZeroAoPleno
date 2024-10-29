@@ -1,0 +1,13 @@
+Rust é uma linguagem de programação multiparadigma compilada desenvolvida pela Mozilla.[11] É projetada para ser "segura,
+concorrente e prática", mas diferente de outras linguagens seguras, Rust não usa coletor de lixo.[12][13]
+Possui suporte nativo ao WebAssembly.[14][15]
+
+A linguagem apareceu como um projeto pessoal de Graydon Hoare, empregado da Mozilla.
+A organização começou a apoiar o projeto em 2009 e anunciou-o em 2010. No mesmo ano, os esforços mudaram do
+compilador original (escrito em OCaml) para um auto-hospedado feito em Rust.
+Conhecido por rustc, conseguiu compilar-se pela primeira vez em 2011 e utiliza o LLVM como back-end.
+Foi lançada pela primeira vez uma versão numerada pré-alfa em 2012. Rust 1.0, a primeira versão estável, foi lançada em 15 de maio de 2015.[16]
+
+Foi considerada pelo público a linguagem "mais amada" por nove anos consecutivos, de acordo com pesquisas conduzidas
+pelo site Stack Overflow de 2016 a 2024,[17][18][19][20][21][22][23][24][25] e está entre as
+25 linguagens mais populares, de acordo com pesquisas conduzidas pela RedMonk desde 2018.[26][27][28][29][30][31][32]
