@@ -187,6 +187,17 @@ fn main() {
 
     // ----------------------
 
+
+    // -- Tarefa: Gerando números aleatórios
+    println!("\n");
+
+    let mut nums: Vec<i32> = Vec::new();
+    for _ in 0..=10 { nums.push( rand::thread_rng().gen_range( 1..=100 ) ); }
+
+    println!( "{:?}", nums )
+
+    // ----------------------
+
 }
 
 fn qtd_linas_arquivo( arquivo: &File ) -> usize {
