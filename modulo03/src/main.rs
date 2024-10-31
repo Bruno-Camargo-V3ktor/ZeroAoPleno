@@ -2,7 +2,7 @@ use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::BufReader;
 use std::io::prelude::*;
-
+use rand::Rng;
 
 struct Pessoa {
     nome: String,
@@ -175,6 +175,18 @@ fn main() {
     }
 
     // ----------------------
+
+
+    // -- Numeros Aleatorios
+    println!("\n");
+
+    //let valores_randomicos = rand::thread_rng().gen_range( 1..101 );
+    //let valores_randomicos = rand::thread_rng().gen_range( 5.0..80.0 );
+    let valores_randomicos = rand::thread_rng().gen_bool( 0.5 ); // 50% de vim true
+    println!( "{}", valores_randomicos );
+
+    // ----------------------
+
 }
 
 fn qtd_linas_arquivo( arquivo: &File ) -> usize {
