@@ -128,6 +128,18 @@ fn main() {
     // ----------------------
 
 
+    // -- Slice String
+
+    println!("\n");
+
+    let nome = "Bruno"; // Um Slice String ( parte de uma String )
+    let nome2 = String::from("Carol"); // Um Objeto String
+
+    println!( "Slice String: {}", nome );
+    println!( "Slice de um objeto String: {}", &nome2[0..4] )
+
+    // ----------------------
+
 }
 
 fn qtd_linas_arquivo( arquivo: &File ) -> usize {
