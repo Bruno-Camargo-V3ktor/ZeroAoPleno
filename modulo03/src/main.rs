@@ -1,4 +1,5 @@
 use std::fs::{File, OpenOptions};
+use std::io;
 use std::io::BufReader;
 use std::io::prelude::*;
 
@@ -106,6 +107,23 @@ fn main() {
         "Rodrigo" => println!("Rodrigo eh programador"),
         _ => println!("não sei sua profissão")
     }
+
+    // ----------------------
+
+
+    // -- Input de dados no Match
+
+    println!("\n");
+
+    let mut mensagen_usuario = String::new();
+    println!("Digite algo? \n");
+    
+    match io::stdin().read_line(&mut mensagen_usuario) {
+        Ok( _ ) => { println!("\nSucesso. voce digitado: {}", mensagen_usuario.to_uppercase()); }
+        Err(error) => println!( "error: {}", error )
+    }
+
+
 
     // ----------------------
 
