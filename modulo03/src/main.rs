@@ -123,8 +123,6 @@ fn main() {
         Err(error) => println!( "error: {}", error )
     }
 
-
-
     // ----------------------
 
 
@@ -136,10 +134,47 @@ fn main() {
     let nome2 = String::from("Carol"); // Um Objeto String
 
     println!( "Slice String: {}", nome );
-    println!( "Slice de um objeto String: {}", &nome2[0..4] )
+    println!( "Slice de um objeto String: {}", &nome2[0..4] );
 
     // ----------------------
 
+
+    // -- Metodos String
+    println!("\n");
+
+    let minha_string = String::from( "Oi meu nome eh Bruno" );
+
+    println!( "{}", minha_string );
+    println!( "{}", minha_string.replace( "Bruno", "Joao" ) );
+
+    {
+        let minha_string = String::from( "Fui hoje\nAo mercado\ncomprar arroz" );
+        for i in minha_string.lines() {
+            println!( "({})", i );
+        }
+    }
+
+    {
+        let minha_string = String::from( "Minha+sogra+eh+muito+feliz" );
+        let token: Vec< &str > = minha_string.split("+").collect();
+        println!( "{:?}", token );
+    }
+
+    {
+        let minha_string = String::from( " Meu nome eh Joao " );
+        println!( "'{}'", minha_string );
+        println!( "'{}'", minha_string.trim() );
+    }
+
+    {
+        let minha_string = String::from( "Deixe uma avalicao de 5 estrelas" );
+        match minha_string.chars().nth(6) {
+            Some( c ) => println!( "Caracter da 6 posicao: {}", c ),
+            _ => {}
+        }
+    }
+
+    // ----------------------
 }
 
 fn qtd_linas_arquivo( arquivo: &File ) -> usize {
