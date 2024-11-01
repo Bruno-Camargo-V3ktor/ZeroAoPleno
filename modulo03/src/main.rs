@@ -194,7 +194,39 @@ fn main() {
     let mut nums: Vec<i32> = Vec::new();
     for _ in 0..=10 { nums.push( rand::thread_rng().gen_range( 1..=100 ) ); }
 
-    println!( "{:?}", nums )
+    println!( "{:?}", nums );
+
+    // ----------------------
+
+
+    // -- Tarefa: Desenvolva o Jogo de Adivinhação de Número
+    println!("\n -- JOGO DA ADIVINHACAO (1 a 100)-- ");
+
+    let secreto = rand::thread_rng().gen_range( 1..=100 );
+
+    loop {
+        let mut tentativa = String::new();
+
+        println!("--> ");
+        std::io::stdin().read_line( &mut tentativa ).expect( "Error ao ler entrada" );
+
+
+        match tentativa.trim().parse::< u32 >() {
+            Ok( num ) => {
+                if num == secreto { println!("Parabens Voce Acertou!!!"); break; }
+                else if num < secreto { println!("Quase... Mais pra cima") }
+                else { println!("Quase... Mais pra baixo") }
+            },
+
+            Err( e ) => {
+                println!( "Error: {}", e );
+                println!("Voce nao digitou um numero, tente novamente");
+            }
+        }
+
+        println!();
+    }
+
 
     // ----------------------
 
