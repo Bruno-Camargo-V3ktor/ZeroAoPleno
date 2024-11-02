@@ -1,6 +1,7 @@
 mod metodo;
 mod shapes;
 mod doenca;
+mod imobiliaria;
 
 use metodo::metodo_teste;
 
@@ -321,7 +322,19 @@ fn main() {
         "Vírus","Repouso, medicamentos"
     );
 
-    println!( "{}", gripe )
+    println!( "{}", gripe );
+
+    // ----------------------
+
+
+    // -- Criar um Código para representar um Mercado Imobiliário
+    println!("\n");
+
+    let mut imobiliaria01 = imobiliaria::Imobiliaria::new( "Sales Imoveis", "Escoka Filho 000" );
+
+    imobiliaria01.add_imovel( "Rua dos Bobos, 124", 200_000.00, 3, 2, 150 );
+
+    imobiliaria01.show_imoves();
 
     // ----------------------
 
