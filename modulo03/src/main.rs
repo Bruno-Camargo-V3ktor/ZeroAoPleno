@@ -1,4 +1,6 @@
 mod metodo;
+mod shapes;
+
 use metodo::metodo_teste;
 
 use std::fs::{File, OpenOptions};
@@ -6,6 +8,7 @@ use std::io;
 use std::io::BufReader;
 use std::io::prelude::*;
 use rand::Rng;
+use crate::shapes::Shape;
 
 struct Pessoa {
     nome: String,
@@ -289,6 +292,7 @@ fn main() {
     metodo::metodo_teste();
     metodo_teste();
 
+
     let p1 = metodo::People::new( String::from("Bruno"), String::from("Camargo") );
     println!("{}", p1.nome);
     p1.qual_nome();
@@ -296,6 +300,16 @@ fn main() {
 
     // ----------------------
 
+
+    // -- Tarefa: Implementar uma forma geométrica
+    println!("\n");
+
+    let circulo = shapes::Circle{ radius: 20.0 };
+    println!( "Funcao Area: {}", circulo.area() );
+    println!( "Funcao Perimito: {}", circulo.perimeter() );
+    circulo.draw();
+
+    // ----------------------
 
 }
 
