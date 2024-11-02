@@ -2,8 +2,12 @@ mod metodo;
 mod shapes;
 mod doenca;
 mod imobiliaria;
+mod operations;
+
+
 
 use metodo::metodo_teste;
+use operations::{ Operation,  calculate };
 
 use std::fs::{File, OpenOptions};
 use std::io;
@@ -335,6 +339,28 @@ fn main() {
     imobiliaria01.add_imovel( "Rua dos Bobos, 124", 200_000.00, 3, 2, 150 );
 
     imobiliaria01.show_imoves();
+
+    // ----------------------
+
+
+    // -- Tarefa: Implementar uma função de cálculo matemático
+    println!("\n");
+
+    let add = Operation::Addition(5, 3);
+    let sub = Operation::Subtraction(5, 3);
+    let mul = Operation::Multiplication(5, 3);
+    let div = Operation::Division(5, 3);
+    let div_by_zero = Operation::Division(5, 0);
+
+    println!("5 + 3 = {}", calculate(add).unwrap());
+    println!("5 - 3 = {}", calculate(sub).unwrap());
+    println!("5 * 3 = {}", calculate(mul).unwrap());
+    println!("5 / 3 = {}", calculate(div).unwrap());
+
+    match calculate(div_by_zero) {
+        Ok(result) => println!("5 / 0 = {}", result),
+        Err(e) => println!("Error: {}", e),
+    }
 
     // ----------------------
 
