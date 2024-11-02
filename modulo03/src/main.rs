@@ -1,5 +1,6 @@
 mod metodo;
 mod shapes;
+mod doenca;
 
 use metodo::metodo_teste;
 
@@ -308,6 +309,19 @@ fn main() {
     println!( "Funcao Area: {}", circulo.area() );
     println!( "Funcao Perimito: {}", circulo.perimeter() );
     circulo.draw();
+
+    // ----------------------
+
+
+     // -- Tarefa: Criar um código para representar uma doença
+    println!("\n");
+
+    let gripe = doenca::Doenca::new(
+        "Gripe", vec!["Tosse".to_string(), "Febre".to_string()],
+        "Vírus","Repouso, medicamentos"
+    );
+
+    println!( "{}", gripe )
 
     // ----------------------
 
