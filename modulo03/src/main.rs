@@ -1,3 +1,6 @@
+mod metodo;
+use metodo::metodo_teste;
+
 use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::BufReader;
@@ -200,11 +203,11 @@ fn main() {
 
 
     // -- Tarefa: Desenvolva o Jogo de Adivinhação de Número
-    println!("\n -- JOGO DA ADIVINHACAO (1 a 100)-- ");
+    /* println!("\n -- JOGO DA ADIVINHACAO (1 a 100)-- ");
 
     let secreto = rand::thread_rng().gen_range( 1..=100 );
 
-    /* loop {
+     loop {
         let mut tentativa = String::new();
 
         println!("--> ");
@@ -232,7 +235,7 @@ fn main() {
 
 
     // -- Tarefa: Jogo de Adivinhação de Palavra
-    println!( "\n -- DESCUBRA A PALAVRA -- \n" );
+    /* println!( "\n -- DESCUBRA A PALAVRA -- \n" );
 
     let palavras = vec![ "Cachorro", "Lapis", "Carro", "Estojo", "Cardeno", "Espaco" ];
     loop {
@@ -275,9 +278,24 @@ fn main() {
 
        break;
 
-    }
+    } */
 
     // ----------------------
+
+
+    // -- Modules com Structs e Impl
+    println!("\n");
+
+    metodo::metodo_teste();
+    metodo_teste();
+
+    let p1 = metodo::People::new( String::from("Bruno"), String::from("Camargo") );
+    println!("{}", p1.nome);
+    p1.qual_nome();
+    p1.nome_completo();
+
+    // ----------------------
+
 
 }
 
