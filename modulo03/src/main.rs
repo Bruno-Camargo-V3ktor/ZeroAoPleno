@@ -204,7 +204,7 @@ fn main() {
 
     let secreto = rand::thread_rng().gen_range( 1..=100 );
 
-    loop {
+    /* loop {
         let mut tentativa = String::new();
 
         println!("--> ");
@@ -225,11 +225,70 @@ fn main() {
         }
 
         println!();
-    }
+    } */
 
 
     // ----------------------
 
+
+    // -- Tarefa: Jogo de Adivinhação de Palavra
+    println!( "\n -- DESCUBRA A PALAVRA -- \n" );
+
+    let palavras = vec![ "Cachorro", "Lapis", "Carro", "Estojo", "Cardeno", "Espaco" ];
+    loop {
+
+        let palavra_secreta = get_rand_value( &palavras ).unwrap().to_string();
+        let mut adivinhacao: Vec<char> = palavra_secreta.chars().map( |_| '_' ).collect();
+
+        while adivinhacao.iter().collect::<String>() != palavra_secreta {
+
+            println!( "\n{:?}", adivinhacao );
+
+            println!( "--> " );
+            let mut input = String::new();
+            io::stdin().read_line(&mut input).expect("Error reading input");
+
+            if input.len() > 2 || input.is_empty() {
+                println!( "Entrada Invalida, tente novamente..." );
+                continue;
+            }
+
+            for i in 0..palavra_secreta.len() {
+
+                let input_char = input.chars().nth(0).unwrap();
+                let palavra_char = palavra_secreta.chars().nth(i).unwrap();
+
+                if input_char.to_lowercase().eq( palavra_char.to_lowercase() ) {
+                    adivinhacao[i] = palavra_char;
+                }
+
+            }
+
+        }
+
+        println!( "\nParabens Voce acertou a palavra secreta: {}", palavra_secreta );
+
+        println!( "Deseja Jogar novamente ? (S/N)" );
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Error reading input");
+        if( input.trim().to_lowercase() == "s" ) { continue }
+
+       break;
+
+    }
+
+    // ----------------------
+
+}
+
+
+fn get_rand_value<T>( vec: &Vec<T> ) -> Option< T >  where T : Clone {
+    if vec.len() < 1 { return None }
+
+    let i = rand::thread_rng().gen_range( 0..vec.len() );
+    let value = vec.get( i ).unwrap();
+
+    Some( value.clone() )
 }
 
 fn qtd_linas_arquivo( arquivo: &File ) -> usize {
