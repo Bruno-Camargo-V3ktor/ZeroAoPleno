@@ -3,8 +3,7 @@ mod shapes;
 mod doenca;
 mod imobiliaria;
 mod operations;
-
-
+mod finance;
 
 use metodo::metodo_teste;
 use operations::{ Operation,  calculate };
@@ -361,6 +360,19 @@ fn main() {
         Ok(result) => println!("5 / 0 = {}", result),
         Err(e) => println!("Error: {}", e),
     }
+
+    // ----------------------
+
+
+    // -- Tarefa: Gerenciamento de portfólio financeiro em Rust
+    println!("\n");
+
+    let mut meu_portfolio = finance::Portfolio::new();
+
+    meu_portfolio.add_asset( finance::Asset::new("AAPL", 135.0, "Acao") );
+    meu_portfolio.add_asset( finance::Asset::new("GOOG", 1235.0, "Acao") );
+
+    println!("Valor total do portfólio: ${:.2}", meu_portfolio.total_value());
 
     // ----------------------
 
