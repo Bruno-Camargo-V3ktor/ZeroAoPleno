@@ -4,6 +4,7 @@ mod doenca;
 mod imobiliaria;
 mod operations;
 mod finance;
+mod bank;
 
 use metodo::metodo_teste;
 use operations::{ Operation,  calculate };
@@ -13,7 +14,8 @@ use std::io;
 use std::io::BufReader;
 use std::io::prelude::*;
 use rand::Rng;
-use crate::shapes::Shape;
+use bank::{Account, BankAccount, Currency};
+use shapes::Shape;
 
 struct Pessoa {
     nome: String,
@@ -373,6 +375,24 @@ fn main() {
     meu_portfolio.add_asset( finance::Asset::new("GOOG", 1235.0, "Acao") );
 
     println!("Valor total do portfólio: ${:.2}", meu_portfolio.total_value());
+
+    // ----------------------
+
+
+    // -- Tarefa: Implementando uma interface BankAccount
+    println!("\n");
+
+    let mut account = Account::new( 0.0, Currency::BRA );
+
+    account.deposit(500.0);
+    println!("Novo saldo: {:.2}", account.check_balance());
+
+    let withdrawal_success = account.withdraw(1200.0);
+    if withdrawal_success {
+        println!("Saque com sucesso, novo saldo: {:.2}", account.check_balance());
+    } else {
+        println!("Saque falhou, saldo insuficiente.");
+    }
 
     // ----------------------
 
