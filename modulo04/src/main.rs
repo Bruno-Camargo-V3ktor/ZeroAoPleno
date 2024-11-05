@@ -1,4 +1,6 @@
 use std::collections::HashSet;
+use std::fs::File;
+use std::io::{BufRead, BufReader, Read};
 use modulo04::executar_estatisticas_descritivas;
 
 fn main() {
@@ -17,10 +19,24 @@ fn main() {
     println!();
 
     let estatistica =
-        executar_estatisticas_descritivas( vec![1, 1, 1, 2, 3, 4, 4, 4, 5, 6, 0] );
+        executar_estatisticas_descritivas( ler_numeros( "dados.txt".to_string() ) );
 
     // --------------------------------
 
+}
+
+fn ler_numeros( path: String ) -> Vec<i32> {
+
+    let mut file = File::open( path ).expect( "file not found" );
+    let mut buffer = BufReader::new( &file );
+    let mut nums: Vec<i32> = Vec::new();
+
+    for linha in buffer.lines() {
+        let value = linha.unwrap().parse::<i32>().unwrap();
+        nums.push(value);
+    }
+
+    nums
 }
 
 fn moda( vec: &Vec<u8> ) -> u8 {
