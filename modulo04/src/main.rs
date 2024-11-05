@@ -23,6 +23,33 @@ fn main() {
 
     // --------------------------------
 
+    // -- Algoritimo Pig-Latin
+    println!();
+
+    let palavra1 = String::from( "amor" );
+    let palavra2 = String::from( "time" );
+
+    println!( "{}", convert_to_pig_latin( &palavra1 ) );
+    println!( "{}", convert_to_pig_latin( & palavra2 ) );
+
+    // --------------------------------
+
+}
+
+fn convert_to_pig_latin( word: &String ) -> String {
+
+    let vogais = ['a', 'e', 'i', 'o', 'u'];
+    let mut new_word = word.clone();
+    let first_char = word.chars().next().unwrap();
+
+    if vogais.contains( &first_char ) { new_word.push_str( "-hay" ); }
+    else {
+        new_word.remove(0);
+        new_word.push_str( format!("-{}ay", first_char).as_str() );
+    }
+
+
+    new_word
 }
 
 fn ler_numeros( path: String ) -> Vec<i32> {
