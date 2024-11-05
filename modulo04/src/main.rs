@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use modulo04::executar_estatisticas_descritivas;
 
 fn main() {
 
@@ -9,6 +10,14 @@ fn main() {
     println!( "Media: {}", media( &notas ) );
     println!( "Mediana: {}", mediana( &notas ) );
     println!( "Moda: {}", moda( &notas ) );
+
+    // --------------------------------
+
+    // -- Tarefa: Estatísticas Descritivas com Structs
+    println!();
+
+    let estatistica =
+        executar_estatisticas_descritivas( vec![1, 1, 1, 2, 3, 4, 4, 4, 5, 6, 0] );
 
     // --------------------------------
 
