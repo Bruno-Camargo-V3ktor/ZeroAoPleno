@@ -1,6 +1,6 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
-use std::io::{BufRead, BufReader, Read};
+use std::io::{stdin, BufRead, BufReader};
 use modulo04::executar_estatisticas_descritivas;
 
 fn main() {
@@ -34,6 +34,46 @@ fn main() {
 
     // --------------------------------
 
+    // -- Departamentos
+    println!();
+
+    departamento();
+
+    // --------------------------------
+
+}
+
+fn departamento() {
+
+    let mut departamentos: HashMap< String, Vec<String> > = HashMap::new();
+
+
+    loop {
+
+        println!( "Digite o comando do tipo: Adicione <Pessoa> para <Departamento>" );
+        let mut comando = String::new();
+
+        stdin().read_line( &mut comando ).expect("Erro ao ler entrada");
+        let comando = comando.trim();
+
+        let mut token_comando = comando.split_whitespace();
+
+        let pessoa = match token_comando.nth(1) {
+            Some( pessoa ) => pessoa,
+            None => { println!("O Comando digitado não é valido"); break; }
+        };
+
+        let departamento =  match token_comando.last() {
+            Some( departamento ) => departamento,
+            None => { println!("O Comando digitado não é valido"); break; }
+        };
+
+        let empregados = departamentos.entry( departamento.to_string() ).or_insert( Vec::new() );
+        empregados.push( pessoa.to_string() );
+
+        println!( "O {} foi adicionado ao departamento {}", pessoa, departamento );
+    }
+
 }
 
 fn convert_to_pig_latin( word: &String ) -> String {
@@ -47,7 +87,6 @@ fn convert_to_pig_latin( word: &String ) -> String {
         new_word.remove(0);
         new_word.push_str( format!("-{}ay", first_char).as_str() );
     }
-
 
     new_word
 }
