@@ -3,6 +3,12 @@ use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
 use modulo04::executar_estatisticas_descritivas;
 
+struct User {
+    name: String,
+    age: u8,
+    friends: Vec< String >,
+}
+
 fn main() {
 
     // -- Media, Mediana e Moda
@@ -34,10 +40,100 @@ fn main() {
 
     // --------------------------------
 
+
     // -- Departamentos
     println!();
 
     departamento();
+
+    // --------------------------------
+
+
+    // -- Tarefa: Rede Socias Simples
+
+    println!();
+
+    let mut users: HashMap<String, User> = HashMap::new();
+
+    loop {
+
+        println!( "\n -- REDE SOCIAL MENU -- " );
+        println!( "1 -> Adicionar Usuário");
+        println!( "2 -> Adicionar Amigo");
+        println!( "3 -> Ver Lista De Amigos");
+        println!( "4 -> Sair");
+
+        let mut op = String::new();
+        stdin().read_line( &mut op ).expect( "Failed to read line!" );
+        let choose = op.trim().parse().unwrap();
+
+        match choose {
+            1 => {
+                println!("\nNome do novo Usuario: ");
+                let mut name = String::new();
+                stdin().read_line( &mut name ).expect( "Failed to read line!" );
+
+                println!("\nIdade do novo Usuario: ");
+                let mut age = String::new();
+                stdin().read_line( &mut age ).expect( "Failed to read line!" );
+                let age: u8 = age.trim().parse().unwrap();
+
+
+                let user = User {  name: name.clone() , age, friends: Vec::new() };
+                users.insert( name, user );
+            },
+
+            2 => {
+
+                println!("\nNome do Usuario: ");
+                let mut user_name = String::new();
+                stdin().read_line( &mut user_name ).expect( "Failed to read line!" );
+
+                println!("\nNome do Amigo");
+                let mut friend_name = String::new();
+                stdin().read_line( &mut friend_name ).expect( "Failed to read line!" );
+
+
+                let friend_option = users.remove( &friend_name );
+                let user_option = users.get_mut( &user_name );
+
+                match ( user_option, &friend_option ) {
+                    ( Some(user), Some(friend) ) => {
+                        user.friends.push( friend.name.clone() );
+                    }
+
+                    _ => { println!( "Usuario ou Amigo nao encontrado!!!" ); }
+                }
+
+                match friend_option {
+                    Some(user) => { users.insert( user.name.clone(), user ); },
+                    _ => {}
+                }
+
+            },
+
+            3 => {
+                println!("\nNome do Usuario: ");
+                let mut user_name = String::new();
+                stdin().read_line( &mut user_name ).expect( "Failed to read line!" );
+
+                match users.get_mut( &user_name ) {
+                    Some(user) => {
+                        for (pos, friend) in user.friends.iter().enumerate() {
+                           println!( "{} - {}", pos, friend );
+                        }
+                    }
+                    None => { println!( "Usuario nao encontrado!!!" ) }
+                }
+
+            },
+
+            4 => { break; },
+
+            _ => { break; }
+        }
+
+    }
 
     // --------------------------------
 
