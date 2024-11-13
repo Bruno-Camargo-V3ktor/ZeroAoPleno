@@ -1,7 +1,11 @@
+mod it;
+
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
 use modulo04::executar_estatisticas_descritivas;
+use it::Router;
+use crate::it::Network;
 
 struct User {
     name: String,
@@ -136,6 +140,23 @@ fn main() {
     }
 
     // --------------------------------
+
+
+    // -- Tarefa: Implementação de uma trait de rede com Rust
+    println!();
+
+    let router = Router::new( "192.133.3.1" );
+
+    let is_alive = router.ping( "google.com" );
+    let trace = router.traceroute("google.com" );
+    let ip = router.nslookup( "google.com" );
+
+    println!("O host está online: {}", is_alive);
+    println!("Trace de rota: {:?}", trace);
+    println!("Endereço IP: {}", ip);
+
+    // --------------------------------
+
 
 }
 
