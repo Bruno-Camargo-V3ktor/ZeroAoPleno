@@ -1,11 +1,13 @@
 mod it;
+mod viagens;
 
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
 use modulo04::executar_estatisticas_descritivas;
 use it::Router;
-use crate::it::Network;
+use it::Network;
+use crate::viagens::{add_passageiro, add_voo, exibir_passageiros, exibir_voos, Passageiro, Voo};
 
 struct User {
     name: String,
@@ -154,6 +156,30 @@ fn main() {
     println!("O host está online: {}", is_alive);
     println!("Trace de rota: {:?}", trace);
     println!("Endereço IP: {}", ip);
+
+    // --------------------------------
+
+
+    // -- Tarefa: Companhia De Viagens
+    println!();
+
+    let mut passageiros: Vec<Passageiro> = Vec::new();
+    let mut voos: Vec<Voo> = Vec::new();
+
+    // Adicione alguns passageiros
+    add_passageiro(&mut passageiros, "João", "123ABC", 18);
+    add_passageiro(&mut passageiros, "Maria", "456DEF", 21);
+    add_passageiro(&mut passageiros, "Pedro", "789GHI", 25);
+
+    // Adicione alguns vôos
+    add_voo(&mut voos, "Voo101", "São Paulo", "Rio de Janeiro", "30/06/2020", "09:00");
+    add_voo(&mut voos, "Voo102", "Rio de Janeiro", "São Paulo", "01/07/2020", "09:00");
+
+    // Exiba os passageiros
+    exibir_passageiros(&passageiros);
+
+    // Exiba os vôos
+    exibir_voos(&voos);
 
     // --------------------------------
 
