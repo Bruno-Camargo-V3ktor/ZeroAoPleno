@@ -4,7 +4,6 @@ mod viagens;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
-use std::os::unix::raw::blkcnt_t;
 use modulo04::executar_estatisticas_descritivas;
 use it::Router;
 use it::Network;
@@ -209,6 +208,74 @@ fn main() {
 
     // --------------------------------
 
+
+    // -- Tarefa: Numero de Rainhas
+    println!();
+
+    println!( "{:?}", n_queens( 2 ) );
+
+    // --------------------------------
+
+}
+
+fn n_queens(size: usize) -> Vec< Vec<String> > {
+    let mut result: Vec< Vec<String> > = Vec::new();
+    let mut board = vec![ vec!['.'; size]; size ];
+
+    backtrack_board(&mut result, &mut board, size, 0);
+
+    result
+}
+
+fn backtrack_board( result: &mut Vec< Vec< String > >, board: &mut Vec< Vec<char> >, size: usize, line: usize ) {
+
+    if line == size || (size == 2 && line == size-1) {
+        result.push(
+            board.iter().map( |l| l.iter().collect::<String>() )
+                .collect()
+        );
+        return;
+    }
+
+    for col in 0 .. size {
+       if is_safe( board, line, col) {
+           board[line][col] = 'Q';
+           backtrack_board(result, board, size, line + 1);
+
+           board[line][col] = '.';
+       }
+    }
+
+}
+
+fn is_safe( tabuleiro: &Vec<Vec<char>>, linha: usize, coluna: usize ) -> bool {
+
+    let size = tabuleiro.len() as i32;
+
+    // Verifica se ha rainhas na mesma coluna
+    for i in 0 .. linha {
+        if tabuleiro[i][coluna] == 'Q' { return false }
+    }
+
+    // Verifica se ha rainhas na diagonal esquerda (cima)
+    let mut i = linha as i32 -1;
+    let mut j = coluna as i32 - 1;
+    while i >= 0 && j >= 0 {
+        if tabuleiro[i as usize][j as usize] == 'Q' { return false }
+        i -= 1;
+        j -= 1;
+    }
+
+    // Verifica se ha rainhas na diagonal direita (cima)
+    let mut i = linha as i32 -1;
+    let mut j = coluna as i32 + 1;
+    while i >= 0 && j <= size-1 {
+        if tabuleiro[i as usize][j as usize] == 'Q' { return false }
+        i -= 1;
+        j += 1;
+    }
+
+    true
 }
 
 fn search_word_in_board( word: &str, board: &[ [char; 4]; 3 ] ) -> bool {
