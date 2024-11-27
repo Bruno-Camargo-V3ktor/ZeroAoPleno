@@ -1,9 +1,10 @@
 mod it;
 mod viagens;
 
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
+use std::os::unix::raw::blkcnt_t;
 use modulo04::executar_estatisticas_descritivas;
 use it::Router;
 use it::Network;
@@ -184,6 +185,155 @@ fn main() {
     // --------------------------------
 
 
+    // -- Tarefa: Caça-Palavra
+    println!();
+
+    let board = [
+        ['A', 'B', 'E', 'E'],
+        ['S', 'F', 'C', 'S'],
+        ['A', 'B', 'C', 'D']
+    ];
+    let word = "SEE";
+
+
+    let board = [
+        ['I', 'H', 'G', 'F'],
+        ['J', 'K', 'F', 'E'],
+        ['A', 'B', 'C', 'D']
+    ];
+    let word = "ABCDEFGHIJK";
+
+    let contain = search_word_in_board( &word, &board );
+    println!( "A palavra {}, contem no tabuleiro? {}", word, contain );
+
+
+    // --------------------------------
+
+}
+
+fn search_word_in_board( word: &str, board: &[ [char; 4]; 3 ] ) -> bool {
+
+    let l = board.len();
+    let c = board[0].len();
+
+    for i in 0..l {
+        for j in 0..c {
+
+            let current_char = board[i][j];
+            let mut chars = word.chars().collect::<VecDeque<char>>();
+
+            if current_char == chars.pop_front().unwrap() {
+
+                let mut historic: HashSet< (usize, usize) > = HashSet::new();
+                let mut check: Vec< (usize, usize) > = Vec::new();
+
+                historic.insert( (i, j) );
+                check.push( (i, j) );
+
+                while !check.is_empty() {
+
+                    let mut results: Vec< Option<_> > = Vec::new();
+                    let target_char = {
+                        match chars.pop_front() {
+                            Some(c) => c,
+                            None => return true
+                        }
+                    };
+
+                    for (x, y) in check.iter() {
+                        results.push( search_nearby_board( target_char, board, (*x as i32, *y as i32) ) );
+                    }
+
+                    check.clear();
+                    for r in results {
+                        match r {
+                            Some( positions ) => {
+                                for (x, y) in positions {
+                                    if historic.contains( &(x, y) ) { continue; }
+
+                                    check.push( (x, y) );
+                                    historic.insert( (i, y) );
+                                }
+                            }
+                            None => {}
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    false
+}
+
+fn search_nearby_board( char: char, board: &[ [char; 4]; 3 ], pos: (i32, i32) ) -> Option< Vec< (usize, usize) > > {
+
+
+    let mut positions = Vec::new();
+
+    let mut add = |linha: i32, coluna: i32| {
+        let l = linha as usize;
+        let c = coluna as usize;
+
+        if !(l < 0 || l >= board.len()) && !(c < 0 || c >= board[0].len()) {
+            if board[l][c] == char { positions.push((l, c)); }
+        }
+    };
+
+    { // Direita
+        let linha = pos.0;
+        let coluna = pos.1 + 1;
+        add(linha, coluna);
+    }
+
+    { // Esquerda
+        let linha = pos.0;
+        let coluna = pos.1 - 1;
+        add(linha, coluna);
+    }
+
+    { // Cima
+        let linha = pos.0 - 1;
+        let coluna = pos.1;
+        add(linha, coluna);
+    }
+
+    { // Baixo
+        let linha = pos.0 + 1;
+        let coluna = pos.1;
+        add(linha, coluna);
+    }
+
+    // Diagonais
+    { // Direita + Baixo
+        let linha = pos.0 + 1;
+        let coluna = pos.1 + 1;
+        add(linha, coluna);
+    }
+
+    { // Direita + Cima
+        let linha = pos.0 - 1;
+        let coluna = pos.1 + 1;
+        add(linha, coluna);
+    }
+
+    { // Esquerda + Baixo
+        let linha = pos.0 + 1;
+        let coluna = pos.1 - 1;
+        add(linha, coluna);
+    }
+
+    { // Esquerda + Cima
+        let linha = pos.0 - 1;
+        let coluna = pos.1 - 1;
+        add(linha, coluna);
+    }
+
+    if positions.is_empty() { None }
+    else { Some( positions ) }
 }
 
 fn departamento() {
