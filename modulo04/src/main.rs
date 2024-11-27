@@ -7,12 +7,28 @@ use std::io::{stdin, BufRead, BufReader};
 use modulo04::executar_estatisticas_descritivas;
 use it::Router;
 use it::Network;
-use crate::viagens::{add_passageiro, add_voo, exibir_passageiros, exibir_voos, Passageiro, Voo};
+use viagens::{add_passageiro, add_voo, exibir_passageiros, exibir_voos, Passageiro, Voo};
+
 
 struct User {
     name: String,
     age: u8,
     friends: Vec< String >,
+}
+
+// -> Batalha Narval
+const BOARD_SIZE: usize = 10;
+
+struct Ship {
+    x: usize,
+    y: usize,
+    length: usize,
+    direction: Direction
+}
+
+enum Direction {
+    Horizontal,
+    Vertical
 }
 
 fn main() {
@@ -213,6 +229,71 @@ fn main() {
     println!();
 
     println!( "{:?}", n_queens( 2 ) );
+
+    // --------------------------------
+
+    // -- Tarefa: Batalha Narval
+    println!();
+
+    let mut board = [ ['_'; BOARD_SIZE]; BOARD_SIZE ];
+    let ships = vec![
+        Ship{ x: 2, y: 4, length: 2, direction: Direction::Horizontal },
+        Ship{ x: 4, y: 5, length: 3, direction: Direction::Vertical },
+        Ship{ x: 8, y: 8, length: 1, direction: Direction::Horizontal }
+    ];
+
+    for ship in ships.iter() {
+        for i in 0 .. ship.length {
+
+            let(x, y) = match ship.direction {
+                Direction::Horizontal => { (ship.x + i, ship.y) }
+                Direction::Vertical => { (ship.x, ship.y + i) }
+            };
+
+            board[x][y] = 'S';
+
+        }
+    }
+
+    println!( "Bem-Vindo a Batalha Naval!" );
+    println!( "Acerte todos os navios antes que acabe os seus tiros" );
+
+    let mut shorts = BOARD_SIZE*BOARD_SIZE;
+    let mut ships_left = ships.len();
+
+    while shorts > 0 && ships_left > 0 {
+        println!( "---------------------------------------------------" );
+        for l in board.iter() { println!( "{:?}", l ); }
+        println!( "---------------------------------------------------" );
+
+        println!( "Voce tem {shorts} tiros restantes" );
+        println!( "Digite as cordenas (Linha Coluna) para atirar..." );
+
+        let mut buffer = String::new();
+        stdin().read_line( &mut buffer ).expect( "Error ao ler entrada" );
+
+        let guess: Vec<usize> = buffer.split_whitespace().map( |s| s.parse::<usize>().unwrap() ).collect();
+
+        let (x, y) = (guess[0] - 1, guess[1] - 1);
+        if x >= BOARD_SIZE || y >= BOARD_SIZE {
+            println!( "Coordenas fora do tabuleiro, tente novamente..." );
+            continue
+        }
+
+        if board[x][y] == 'S' {
+            println!( "Voce acertou um navio!" );
+            board[x][y] = 'X';
+            ships_left -= 1;
+        }
+        else {
+            println!( "Voce Errou" );
+            board[x][y] = 'O';
+        }
+        shorts -= 1;
+    }
+
+    if ships_left == 0 { println!( "Voce ganhou no jogo :)" ) }
+    else { println!( "Voce perdeu no jogo :(" ) }
 
     // --------------------------------
 
@@ -433,7 +514,6 @@ fn departamento() {
 
         println!( "O {} foi adicionado ao departamento {}", pessoa, departamento );
     }
-
 }
 
 fn convert_to_pig_latin( word: &String ) -> String {
