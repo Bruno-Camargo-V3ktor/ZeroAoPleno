@@ -39,6 +39,7 @@ fn main() {
 
 fn insertion_sort(vec: &mut Vec<i32>) {
     for i in 1 .. vec.len() {
+
         'search : for j in ( 1 ..= i ).rev() {
             if vec[j - 1] > vec[j] {
                 vec.swap(j-1, j);
