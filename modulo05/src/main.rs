@@ -1,7 +1,22 @@
+mod solutions;
+
 use std::{fs::File, io::Read};
+use solutions::Solution;
 
 
 fn main() {
+
+    // -- Algoritimo de Two Sums
+
+    let v = vec![1, 2, 3, 4, 5];
+
+    assert_eq!( Solution::two_sums(&v, 9), vec![3, 4] );
+    assert_eq!( Solution::two_sums(&v, 3), vec![0, 1] );
+    assert_eq!( Solution::two_sums(&v, 5), vec![0, 3] );
+
+    println!( );
+    // ---------------------------
+
 
     // -- Algoritimo de Ordenacao por Insercao (Insertion Sort)
 
