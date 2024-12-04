@@ -24,8 +24,17 @@ fn search(query: String, max_results: i32, page: i32) -> String {
     format!( "Searching for '{query}' (max:{max_results}, page:{page}) " )
 }
 
+#[ get( "/filter?<query>&<name>" ) ]
+fn filter( query: String, name: Option<String> ) -> String {
+
+    match name {
+        Some(t) => format!( "Buscando o {query}, com o nome: {t} " ),
+        None => format!( "Buscando o {query}" )
+    }
+
+}
 
 #[ launch ]
 fn init() -> _ {
-    rocket::build().mount("/", routes![teste, hello, number, search])
+    rocket::build().mount("/", routes![teste, hello, number, search, filter])
 }
