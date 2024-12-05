@@ -12,7 +12,7 @@ fn main() {
 
     assert_eq!( Solution::two_sums(&v, 9), vec![3, 4] );
     assert_eq!( Solution::two_sums(&v, 3), vec![0, 1] );
-    assert_eq!( Solution::two_sums(&v, 5), vec![0, 3] );
+    assert_eq!( Solution::two_sums(&v, 5), vec![1, 2] );
 
     println!( );
     // ---------------------------
