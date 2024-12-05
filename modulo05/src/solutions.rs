@@ -30,4 +30,13 @@ impl Solution {
         vec![]
     }
 
+    pub fn linear_search( vec: &Vec<i32>, target: i32 ) -> i32 {
+
+        for i in 0 .. vec.len() {
+            if vec[i] == target { return i as i32; }
+        }
+
+        -1
+    }
+
 }

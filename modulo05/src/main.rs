@@ -6,6 +6,18 @@ use solutions::Solution;
 
 fn main() {
 
+    // -- Tarefa: Algoritimo de Busca Linear
+
+    let v = vec![1, 2, 3, 4, 5];
+
+    assert_eq!( Solution::linear_search(&v, 2), 1);
+    assert_eq!( Solution::linear_search(&v, 4),  3);
+    assert_eq!( Solution::linear_search(&v, 9), -1);
+
+    println!( );
+    // ---------------------------
+
+
     // -- Algoritimo de Two Sums
 
     let v = vec![1, 2, 3, 4, 5];
