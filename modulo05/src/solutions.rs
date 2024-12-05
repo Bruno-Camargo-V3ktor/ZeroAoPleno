@@ -1,3 +1,5 @@
+use std::any::Any;
+
 
 pub struct Solution {}
 
@@ -69,5 +71,24 @@ impl Solution {
 
     }
 
+    pub fn tratar_entrada( valor: &dyn Any ) {
+
+        if let Some(val) = valor.downcast_ref::<i32>() {
+            println!("É um i32: {}", val * 2);
+        }
+
+        else if let Some(val) = valor.downcast_ref::<String>() {
+            println!("É uma String: {}", val.len());
+        }
+
+        else if let Some(val) = valor.downcast_ref::< Vec<i32> >() {
+            println!("É um Vetor de inteiros: {}", val.len());
+        }
+
+        else {
+            println!("Tipo de dado nao suportado");
+        }
+
+    }
 
 }

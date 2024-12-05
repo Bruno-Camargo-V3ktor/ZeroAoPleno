@@ -6,6 +6,20 @@ use solutions::Solution;
 
 fn main() {
 
+    // -- Tarefa: Utilizando Pattern Matching para tratar diferentes tipos de entradas em Rust
+
+    let vetor = vec![1, 2, 3, 4];
+    let texto = String::from("Caralho");
+    let numero = 12;
+
+    Solution::tratar_entrada( &vetor );
+    Solution::tratar_entrada( &texto );
+    Solution::tratar_entrada( &numero );
+
+    println!( );
+    // ---------------------------
+
+
     // -- Tarefa: Máximo Número de Moedas Que Você Pode Obter
 
     let mut piles1 = vec![2, 4, 1, 2, 7, 8];
