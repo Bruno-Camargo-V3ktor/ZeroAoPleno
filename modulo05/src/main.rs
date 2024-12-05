@@ -6,6 +6,20 @@ use solutions::Solution;
 
 fn main() {
 
+    // -- Tarefa: Máximo Número de Moedas Que Você Pode Obter
+
+    let mut piles1 = vec![2, 4, 1, 2, 7, 8];
+    let mut piles2 = vec![2, 4, 5];
+    let mut piles3 = vec![9, 8, 7, 6, 5, 1, 2, 3, 4];
+
+    println!( "{}", Solution::max_coins( &mut piles1 ) );
+    println!( "{}", Solution::max_coins( &mut piles2 ) );
+    println!( "{}", Solution::max_coins( &mut piles3 ) );
+
+    println!( );
+    // ---------------------------
+
+
     // -- Tarefa: Algoritimo de Busca Binaria
 
     let v = vec![1, 2, 3, 4, 5];

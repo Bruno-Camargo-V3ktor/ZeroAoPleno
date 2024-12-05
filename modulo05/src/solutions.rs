@@ -55,4 +55,19 @@ impl Solution {
         None
     }
 
+    pub fn max_coins(piles: &mut Vec<i32>) -> i32 {
+
+        piles.sort_unstable();
+        let numbers = piles.len();
+
+        piles.iter()
+            .rev()
+            .take( (numbers*2) / 3  )
+            .skip(1)
+            .step_by(2)
+            .sum::<i32>()
+
+    }
+
+
 }
