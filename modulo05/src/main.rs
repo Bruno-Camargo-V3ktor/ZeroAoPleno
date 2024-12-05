@@ -6,6 +6,17 @@ use solutions::Solution;
 
 fn main() {
 
+    // -- Tarefa: Algoritimo de Busca Binaria
+
+    let v = vec![1, 2, 3, 4, 5];
+
+    assert_eq!( Solution::binary_search(&v, 2), Some(1));
+    assert_eq!( Solution::binary_search(&v, 9), None);
+
+    println!( );
+    // ---------------------------
+
+
     // -- Tarefa: Algoritimo de Busca Linear
 
     let v = vec![1, 2, 3, 4, 5];

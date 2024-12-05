@@ -39,4 +39,20 @@ impl Solution {
         -1
     }
 
+    pub fn binary_search( vec: &Vec<i32>, target: i32 ) -> Option<usize> {
+
+        let mut head = 0;
+        let mut tail = vec.len() - 1;
+
+        while head <= tail {
+            let mid = (head + tail) / 2;
+
+            if vec[mid] == target { return Some(mid); }
+            else if vec[mid] < target { head = mid + 1; }
+            else { tail = mid - 1; }
+        }
+
+        None
+    }
+
 }
