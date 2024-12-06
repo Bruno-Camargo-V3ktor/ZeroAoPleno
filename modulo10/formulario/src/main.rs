@@ -1,7 +1,7 @@
 use rocket::{ launch, routes, get, post };
 use rocket::response::content;
 use rocket::http::Status;
-use rocket::serde::json::Json;
+use rocket::serde::json::{Json};
 use serde::{Deserialize, Serialize};
 
 
@@ -109,7 +109,6 @@ fn submit_form( form_input: Json<FormInput> ) -> Result< content::RawHtml<String
             Err( (Status::UnprocessableEntity, html) )
         }
     }
-
 }
 
 #[ launch ]
