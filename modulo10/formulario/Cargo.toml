@@ -1,0 +1,9 @@
+[package]
+name = "formulario"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rocket = { version = "0.5.1" , features = ["json"] }
+serde = { version = "1.0" , features = ["derive"] } #Biblioteca Generica para a Serializacao e Deserizcao de dados, para que assim possam ser convertidos e transmitidos na rede
+serde_json = "1.0" #Extensao da biblioteca serde, especifico apra trata de JSON
