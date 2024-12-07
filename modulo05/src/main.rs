@@ -1,10 +1,40 @@
 mod solutions;
 
 use std::{fs::File, io::Read};
-use solutions::Solution;
+use solutions::{Solution, max_uber_earnings};
 
 
 fn main() {
+
+    // -- Tarefa: Ganhos Máximos do Uber
+
+
+    let n = 2;
+    let rides = vec![
+        vec![2, 5, 4],
+        vec![1, 5, 1],
+    ];
+
+    let resultado = max_uber_earnings(n, rides);
+    println!( "{resultado}" );
+
+
+    let n = 6;
+    let rides = vec![
+        vec![1, 6, 1],
+        vec![3, 10, 2],
+        vec![10, 12, 3],
+        vec![11, 12, 2],
+        vec![12, 15, 1],
+        vec![13, 18, 1],
+    ];
+
+    let resultado = max_uber_earnings(n, rides);
+    println!( "{resultado}" );
+
+    println!( );
+    // ---------------------------
+
 
     // -- Tarefa: Utilizando Pattern Matching para tratar diferentes tipos de entradas em Rust
 

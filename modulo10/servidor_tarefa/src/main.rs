@@ -11,6 +11,7 @@ fn saudacao(nome: String, idade: u8, legal: bool) -> content::RawHtml<String> {
 
     let html = format!(
         r#"
+
         <!DOCTYPE html>
         <html>
             <head>
@@ -22,6 +23,7 @@ fn saudacao(nome: String, idade: u8, legal: bool) -> content::RawHtml<String> {
                 <p>{msg}</p>
             </body>
         </html>
+
         "#
     );
 

@@ -1,7 +1,40 @@
 use std::any::Any;
 
+// Structs
 
 pub struct Solution {}
+
+#[ derive(Debug, PartialEq) ]
+pub struct Passanger {
+    start: i32,
+    end: i32,
+    earn: f64
+}
+
+
+// Implements
+
+impl Passanger {
+
+    pub fn new(start: i32, end: i32, tip: i32) -> Self {
+        Self { start, end, earn: (end - start + tip) as f64  }
+    }
+}
+
+impl Eq for Passanger {}
+
+impl  PartialOrd for Passanger {
+
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.end.partial_cmp( &other.end )
+    }
+}
+
+impl Ord for Passanger {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.end.cmp( &other.end )
+    }
+}
 
 impl Solution {
 
@@ -90,5 +123,22 @@ impl Solution {
         }
 
     }
+}
 
+// Functions
+
+pub fn max_uber_earnings(n: i32, rides: Vec< Vec<i32> >) -> i64 {
+
+    let mut passangers: Vec<Passanger> = rides
+        .iter().map( | v | Passanger::new(v[0], v[1], v[2]) ).collect();
+
+    passangers.sort_unstable();
+    let mut dp = vec![0; passangers.len() + 1];
+
+    for i in 0 .. passangers.len() {
+        let j = passangers.partition_point( |p| p.end <= passangers[i].start );
+        dp[i + 1] = dp[i].max( dp[j] + (passangers[i].earn as i32) );
+    }
+
+    *dp.last().unwrap() as i64
 }
