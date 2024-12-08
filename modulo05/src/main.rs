@@ -6,6 +6,26 @@ use solutions::{Solution, max_uber_earnings};
 
 fn main() {
 
+    // -- Número Mínimo de Linhas para Representar um Gráfico de Ações Mercado Financeiro
+
+    let acoes = vec![
+        vec![1, 7],
+        vec![2, 6],
+        vec![3, 5],
+        vec![4, 4],
+        vec![5, 4],
+        vec![6, 3],
+        vec![7, 2],
+        vec![8, 1],
+        vec![9, 0],
+    ];
+    let linhas = Solution::minimum_lines( acoes );
+
+    println!( "Numero de linhas: {linhas}" );
+
+    println!( );
+    // ---------------------------
+
     // -- Tarefa: Dinheiro mínimo exigido antes das transações
 
     let transacoes = vec![

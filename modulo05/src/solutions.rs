@@ -137,6 +137,29 @@ impl Solution {
         dinheiro_minimo
     }
 
+    pub fn minimum_lines( mut precos_acoes: Vec< Vec<i32> > ) -> i32 {
+        let size = precos_acoes.len();
+        if size<= 2 { return i32::max(0, ( size - 1 ) as i32 ) }
+
+
+        precos_acoes.sort_unstable();
+        let mut res = 1;
+
+        for i in precos_acoes.windows(3) {
+
+            // Calculor do Coeficiente Angular
+            let esquerdo = ( i[1][1] - i[0][1] ) * ( i[2][0] - i[1][0] );
+            let direito = ( i[2][1] - i[1][1] ) * ( i[1][0] - i[0][0] );
+
+            if esquerdo != direito {
+                res += 1;
+            }
+
+        }
+
+        res
+    }
+
 }
 
 // Functions
