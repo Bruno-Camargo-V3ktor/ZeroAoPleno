@@ -6,6 +6,37 @@ use solutions::{Solution, max_uber_earnings};
 
 fn main() {
 
+    // -- Encontrar Jogadores com Zero ou Uma Derrota
+
+    let matches = vec![
+        vec![1,3],
+        vec![2,3],
+        vec![3,6],
+        vec![5,6],
+        vec![5,7],
+        vec![4,5],
+        vec![4,8],
+        vec![4,9],
+        vec![10,4],
+        vec![10,9]
+    ];
+    let res = Solution::players_with_zero_or_one_loss(matches);
+    println!( "{res:?}" );
+
+    let matches = vec![
+        vec![2,3],
+        vec![1,3],
+        vec![5,4],
+        vec![6,4],
+
+    ];
+    let res = Solution::players_with_zero_or_one_loss(matches);
+    println!( "{res:?}" );
+
+    println!( );
+    // ---------------------------
+
+
     // -- Número Mínimo de Linhas para Representar um Gráfico de Ações Mercado Financeiro
 
     let acoes = vec![

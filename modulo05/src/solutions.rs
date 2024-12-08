@@ -1,4 +1,4 @@
-use std::any::Any;
+use std::{any::Any, collections::HashMap};
 
 // Structs
 
@@ -137,27 +137,49 @@ impl Solution {
         dinheiro_minimo
     }
 
-    pub fn minimum_lines( mut precos_acoes: Vec< Vec<i32> > ) -> i32 {
-        let size = precos_acoes.len();
+    pub fn minimum_lines( mut prices: Vec< Vec<i32> > ) -> i32 {
+        let size = prices.len();
         if size<= 2 { return i32::max(0, ( size - 1 ) as i32 ) }
 
 
-        precos_acoes.sort_unstable();
+        prices.sort_unstable();
         let mut res = 1;
 
-        for i in precos_acoes.windows(3) {
+        for i in prices.windows(3) {
 
             // Calculor do Coeficiente Angular
-            let esquerdo = ( i[1][1] - i[0][1] ) * ( i[2][0] - i[1][0] );
-            let direito = ( i[2][1] - i[1][1] ) * ( i[1][0] - i[0][0] );
+            let left_eq = ( i[1][1] - i[0][1] ) * ( i[2][0] - i[1][0] );
+            let right_eq = ( i[2][1] - i[1][1] ) * ( i[1][0] - i[0][0] );
 
-            if esquerdo != direito {
+            if left_eq != right_eq {
                 res += 1;
             }
 
         }
 
         res
+    }
+
+    pub fn players_with_zero_or_one_loss( matches: Vec< Vec<i32> > ) -> Vec< Vec<i32> > {
+
+        let mut losses = HashMap::<i32, i32>::new();
+        let mut answer = vec![ vec![], vec![] ];
+
+        matches.iter().for_each( |m| {
+            losses.entry(m[0]).or_insert(0); //Vencedor
+
+            let player = losses.entry( m[1] ).or_insert(0); // Perderdor
+            *player += 1;
+        } );
+
+        let mut values: Vec<_> = losses.iter().map( |(k, v)| (k, v) ).collect();
+        values.sort_unstable();
+
+        for (k, v) in values {
+            if *v <= 1 { answer[*v as usize].push( *k ); }
+        }
+
+        answer
     }
 
 }
