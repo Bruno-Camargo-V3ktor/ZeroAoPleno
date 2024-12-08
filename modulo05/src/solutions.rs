@@ -101,7 +101,6 @@ impl Solution {
             .skip(1)
             .step_by(2)
             .sum::<i32>()
-
     }
 
     pub fn tratar_entrada( valor: &dyn Any ) {
@@ -121,8 +120,23 @@ impl Solution {
         else {
             println!("Tipo de dado nao suportado");
         }
-
     }
+
+    pub fn dinheiro_minimo(transacoes: Vec< Vec<i32> > ) -> i64 {
+        let mut gastos_liquidos = 0;
+
+        for t in &transacoes {
+            gastos_liquidos += i32::max(0, t[0] - t[1]) as i64;
+        }
+
+        let mut dinheiro_minimo = gastos_liquidos;
+        for t in &transacoes {
+            dinheiro_minimo = i64::max(dinheiro_minimo, gastos_liquidos + ( i32::min(t[0], t[1]) ) as i64 );
+        }
+
+        dinheiro_minimo
+    }
+
 }
 
 // Functions

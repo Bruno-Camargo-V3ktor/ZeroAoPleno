@@ -6,8 +6,32 @@ use solutions::{Solution, max_uber_earnings};
 
 fn main() {
 
-    // -- Tarefa: Ganhos Máximos do Uber
+    // -- Tarefa: Dinheiro mínimo exigido antes das transações
 
+    let transacoes = vec![
+        vec![2, 1],
+        vec![5, 0],
+        vec![4, 2]
+    ];
+
+    let res = Solution::dinheiro_minimo(transacoes);
+
+    println!( "{res}" );
+
+    let transacoes = vec![
+        vec![3, 0],
+        vec![0, 3],
+    ];
+
+    let res = Solution::dinheiro_minimo(transacoes);
+
+    println!( "{res}" );
+
+    println!( );
+    // ---------------------------
+
+
+    // -- Tarefa: Ganhos Máximos do Uber
 
     let n = 2;
     let rides = vec![
