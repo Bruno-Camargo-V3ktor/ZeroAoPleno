@@ -182,6 +182,28 @@ impl Solution {
         answer
     }
 
+    pub fn rearrange_number( num: i32 ) -> i32 {
+
+        let mut digits: Vec<char> = num.abs().to_string().chars().collect();
+        let signal = num.signum();
+
+        if signal >= 0 {
+            digits.sort();
+            if let Some(pos) = digits.iter().position( |x| *x != '0' ) {
+                digits.swap(0, pos);
+            }
+        }
+
+        else {
+            digits.sort_by( |a, b| b.cmp(a) );
+        }
+
+        let new_number: String = digits.iter().collect();
+        let res = ( new_number.parse::<i32>().unwrap() ) * signal;
+
+        res
+    }
+
 }
 
 // Functions

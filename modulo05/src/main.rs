@@ -6,6 +6,17 @@ use solutions::{Solution, max_uber_earnings};
 
 fn main() {
 
+    // -- Menor Valor do Número Reorganizado
+
+    println!( "-- ({})", Solution::rearrange_number( 310 ) );
+    println!( "-- ({})", Solution::rearrange_number( -103 ) );
+    println!( "-- ({})", Solution::rearrange_number( -7605 ) );
+    println!( "-- ({})", Solution::rearrange_number( 3100 ) );
+
+    println!( );
+    // ---------------------------
+
+
     // -- Encontrar Jogadores com Zero ou Uma Derrota
 
     let matches = vec![
