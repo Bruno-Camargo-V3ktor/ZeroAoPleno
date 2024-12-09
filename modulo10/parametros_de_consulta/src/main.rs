@@ -2,7 +2,6 @@ use rocket::{ launch, build, routes, get };
 use rocket::response::content::RawHtml;
 use rocket::response::status::BadRequest;
 
-
 #[ get( "/<param>?<a>&<b>&<c>" ) ]
 fn index( param: usize, a: Option<String>, b: Option<u32>, c: Option<bool> ) -> Result<RawHtml<String>, BadRequest<String>> {
 
