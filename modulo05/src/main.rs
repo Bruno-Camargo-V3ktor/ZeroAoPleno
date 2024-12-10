@@ -4,7 +4,20 @@ use std::{fs::File, io::Read};
 use solutions::{Solution, max_uber_earnings};
 
 
-fn main() {
+fn main() -> std::io::Result<()> {
+
+    // -- Tarfea: Leitura, Ordenação e Criação de Arquivos
+
+    let mut nums = Solution::ler_arquivo( "nums_desodenados.txt" )?;
+    println!( "Numeros Desodenados: {nums:?}" );
+
+    Solution::bubble_sort( &mut nums );
+    Solution::salvar_arquivo( &nums, "nums_ordenados.txt" )?;
+    println!( "Numeros Ordenados: {nums:?}" );
+
+    println!( );
+    // ---------------------------
+
 
     // -- Tarfea: Recompensar os Top K Alunos
 
@@ -239,6 +252,7 @@ fn main() {
     println!( "{array:?}" );
     // ---------------------------
 
+    Ok( () )
 }
 
 fn insertion_sort(vec: &mut Vec<i32>) {

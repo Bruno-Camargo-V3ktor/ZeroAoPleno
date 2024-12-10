@@ -1,4 +1,7 @@
-use std::{any::Any, collections::HashMap, collections::HashSet};
+use std::{any::Any, collections::HashMap, collections::HashSet, fs::File, path::Path};
+
+use std::io::prelude::*;
+use std::io::{self, Read, Write, BufReader, BufWriter};
 
 // Structs
 
@@ -213,7 +216,7 @@ impl Solution {
         for (i, &rel) in relatorio.iter().enumerate() {
             let aluno = pontuacoes.entry( id_aluno[i] ).or_insert(0);
 
-            for palavra in relatorio[i].split_whitespace() {
+            for palavra in rel.split_whitespace() {
                 if conjunto_positivo.contains( palavra ) { *aluno += 3; }
                 else if conjunto_negativo.contains( palavra ) { *aluno -= 1; }
             }
@@ -226,6 +229,38 @@ impl Solution {
         } );
 
         alunos.into_iter().take(k as usize).map( |(id, _)| id ).collect()
+    }
+
+    pub fn ler_arquivo( filename: &str ) -> io::Result< Vec<i32> > {
+        let path = Path::new( filename );
+        let file = File::open( &path )?;
+
+        let mut reader = BufReader::new( file );
+        let numeros = reader
+            .lines()
+            .filter_map( |line| line.ok()?.parse().ok() )
+            .collect::< Vec<i32> >();
+
+        Ok( numeros )
+    }
+
+    pub fn salvar_arquivo( numeros: &Vec<i32>, filename: &str ) -> io::Result<()> {
+        let path = Path::new( filename );
+        let file = File::create( &path )?;
+
+        let mut writer = BufWriter::new( file );
+        for &numero in numeros { writeln!( writer, "{numero}" )? }
+
+        Ok(())
+    }
+
+    pub fn bubble_sort( arr: &mut Vec<i32> ) {
+
+        let size = arr.len();
+
+        for i in 0 .. size  {
+            for j in (i+1 .. size).rev() { if arr[j-1] > arr[j] { arr.swap(j-1, j); } }
+        }
     }
 
 }
