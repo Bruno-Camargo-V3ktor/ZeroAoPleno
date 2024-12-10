@@ -1,4 +1,4 @@
-use std::{any::Any, collections::HashMap};
+use std::{any::Any, collections::HashMap, collections::HashSet};
 
 // Structs
 
@@ -202,6 +202,30 @@ impl Solution {
         let res = ( new_number.parse::<i32>().unwrap() ) * signal;
 
         res
+    }
+
+    pub fn melhores_alunos( feedback_positivo: Vec<&str>, feedback_negativo: Vec<&str>, relatorio: Vec<&str>, id_aluno: Vec<i32>, k: i32  ) -> Vec<i32> {
+
+        let conjunto_positivo: HashSet<&str> = feedback_positivo.iter().map( |s| *s ).collect();
+        let conjunto_negativo: HashSet<&str> = feedback_negativo.iter().map( |s| *s ).collect();
+        let mut pontuacoes = HashMap::<i32, i32>::new();
+
+        for (i, &rel) in relatorio.iter().enumerate() {
+            let aluno = pontuacoes.entry( id_aluno[i] ).or_insert(0);
+
+            for palavra in relatorio[i].split_whitespace() {
+                if conjunto_positivo.contains( palavra ) { *aluno += 3; }
+                else if conjunto_negativo.contains( palavra ) { *aluno -= 1; }
+            }
+        }
+
+        let mut alunos: Vec<(i32, i32)> = pontuacoes.into_iter().collect();
+        alunos.sort_by( |a, b| {
+            if a.1 == b.1 { a.0.cmp( &b.0 ) }
+            else { b.1.cmp( &a.1 ) }
+        } );
+
+        alunos.into_iter().take(k as usize).map( |(id, _)| id ).collect()
     }
 
 }

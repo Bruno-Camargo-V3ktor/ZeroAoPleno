@@ -6,6 +6,28 @@ use solutions::{Solution, max_uber_earnings};
 
 fn main() {
 
+    // -- Tarfea: Recompensar os Top K Alunos
+
+    let feedback_positivo = vec!["inteligente", "brilhante", "estudioso"];
+    let feedback_negativo = vec!["não"];
+    let relatorio = vec!["este aluno é estudioso", "o aluno é inteligente"];
+    let id_aluno = vec![1, 2];
+    let k = 2;
+    let res = Solution::melhores_alunos(feedback_positivo, feedback_negativo, relatorio, id_aluno, k);
+    println!( "{res:?}" );
+
+    let feedback_positivo = vec!["inteligente", "brilhante", "estudioso"];
+    let feedback_negativo = vec!["não"];
+    let relatorio = vec!["este aluno não é estudioso", "o aluno é inteligente"];
+    let id_aluno = vec![1, 2];
+    let k = 2;
+    let res = Solution::melhores_alunos(feedback_positivo, feedback_negativo, relatorio, id_aluno, k);
+    println!( "{res:?}" );
+
+    println!( );
+    // ---------------------------
+
+
     // -- Menor Valor do Número Reorganizado
 
     println!( "-- ({})", Solution::rearrange_number( 310 ) );
