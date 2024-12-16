@@ -3,8 +3,25 @@ use std::sync::{mpsc, Arc, Mutex};
 use std::time::{Duration, Instant};
 use rand::{self, Rng};
 use rayon::prelude::*;
+use tokio::time::{self, sleep};
 
-fn main() {
+#[ tokio::main ]
+async fn main() {
+
+    // --/> Métodos Assíncronos (Parte 1)
+
+    let tarefa1 = tokio::spawn( tarefa_assincrona(1, 3) );
+    let tarefa2 = tokio::spawn( tarefa_assincrona(2, 1) );
+
+    let res1 = tarefa1.await.unwrap();
+    let res2 = tarefa2.await.unwrap();
+
+    println!( "Res1: {res1:?}" );
+    println!( "Res2: {res2:?}" );
+
+    println!();
+    // ----
+
 
     // --/> (Tarfea) Numeros Primos com Paralerimos
 
@@ -222,6 +239,16 @@ fn main() {
     // ----
 }
 
+
+async fn tarefa_assincrona(id: u32, duracao: u64) {
+    println!("Iniciando a tarfea: '{id}'");
+
+    // Atraso propozital
+    sleep( time::Duration::from_secs(duracao) ).await;
+
+
+    println!("Fim da tarfea: '{id}'");
+}
 
 
 fn is_prime( num: u64 ) -> bool {

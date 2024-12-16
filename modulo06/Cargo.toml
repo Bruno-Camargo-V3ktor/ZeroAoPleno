@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 rand = "*"
 rayon = "*"
+tokio = { version = "*", features=["full"] }
