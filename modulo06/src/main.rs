@@ -4,9 +4,22 @@ use std::time::{Duration, Instant};
 use rand::{self, Rng};
 use rayon::prelude::*;
 use tokio::time::{self, sleep};
+use reqwest::Error;
 
 #[ tokio::main ]
 async fn main() {
+
+    // --/> Métodos Assíncronos (Parte 2)
+
+    let solicitacao1 = tokio::spawn( fazer_solicitacao( 1, "https://www.example.com" ) );
+    let solicitacao2 = tokio::spawn( fazer_solicitacao( 2, "https://www.rust-lang.org" ) );
+
+    let _ = solicitacao1.await;
+    let _ = solicitacao2.await;
+
+    println!();
+    // ----
+
 
     // --/> Métodos Assíncronos (Parte 1)
 
@@ -239,6 +252,18 @@ async fn main() {
     // ----
 }
 
+
+async fn fazer_solicitacao(id: u32, url: &str) -> Result<(), Error> {
+    println!(" Iniciando a solicitação '{id}' para '{url}' ");
+
+    sleep( time::Duration::from_secs(2) ).await;
+
+    let resposta = reqwest::get( url ).await?;
+
+    println!( "RESPONSE '{id}': STATUS: {:?}", resposta.status()  );
+
+    Ok( () )
+}
 
 async fn tarefa_assincrona(id: u32, duracao: u64) {
     println!("Iniciando a tarfea: '{id}'");

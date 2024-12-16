@@ -7,3 +7,4 @@ edition = "2024"
 rand = "*"
 rayon = "*"
 tokio = { version = "*", features=["full"] }
+reqwest = "*"
