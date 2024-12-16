@@ -2,7 +2,37 @@ use std::thread;
 use std::sync::{mpsc, Arc, Mutex};
 use std::time::Duration;
 
+use rand::{self, Rng};
+
 fn main() {
+
+    // --/> (Tarefa) Concorrencia com Valores Aleatorios
+
+    let ( transmissor, receptor ) = mpsc::channel::<i32>();
+    let mut values = vec![];
+
+    thread::spawn( move || {
+
+        let mut r = rand::thread_rng();
+
+        for _ in 0..5 {
+            transmissor.send( r.gen_range( 0..=10 ) ).unwrap();
+            thread::sleep( Duration::from_secs(3) );
+        }
+
+    });
+
+
+    for _ in 0..5 {
+        let v = receptor.recv().unwrap();
+        values.push( v );
+    }
+
+    println!( "Valores gerados: {values:?}" );
+
+    println!();
+    // ----
+
 
     // --/> Tempo de Duracao em Threads
 
