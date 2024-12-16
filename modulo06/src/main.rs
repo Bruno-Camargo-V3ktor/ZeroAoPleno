@@ -2,6 +2,23 @@ use std::thread;
 
 fn main() {
 
+
+    // --/> Encadeamento de Threads
+
+    let result1 = thread::spawn( || {
+        42
+    } ).join().unwrap();
+
+    let result2 = thread::spawn( move || {
+        result1 * 2
+    } ).join().unwrap();
+
+    println!( "Resultado final: {result2}" );
+
+    println!();
+    // ----
+
+
     // --/> Exemplos de Uso das Threads
 
     let handle1 = thread::spawn( || {
@@ -18,8 +35,8 @@ fn main() {
     println!( "Fim das Threads..." );
 
     // A funcao join do JoinHandle, ira retorna um result, que caso de tudo certo na
-    // "esperar" na thread atual, ele ira retorna um Ok com o Result que eh o retorno da Thread execuatda
-    // Caso aconteca algum erro, ele ira retorna um Err
+        // "esperar" na thread atual, ele ira retorna um Ok com o retorno da Thread execuatda
+        // Caso aconteca algum erro, ele ira retorna um Err
 
     let result = thread::spawn( || {
         Err::<i32, &str>("Algo deu errado")
