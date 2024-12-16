@@ -4,6 +4,25 @@ use std::time::Duration;
 
 fn main() {
 
+    // --/> Tempo de Duracao em Threads
+
+    let headles: Vec<_> = (0..5).map( |i| {
+        thread::spawn( move || {
+            thread::sleep( Duration::from_secs(i) );
+            println!( "Thread '{i}' finalizada..." );
+            i*i
+        })
+    }).collect();
+
+    headles.into_iter().for_each( |h| {
+        let v = h.join().unwrap();
+        println!( "{v}" );
+    } );
+
+    println!();
+    // ----
+
+
     // --/> Canal de Comunicacao entre as Threads
 
     //Criando um canal de comunicao(transmissor e receptor)
