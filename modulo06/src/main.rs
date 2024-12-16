@@ -1,10 +1,41 @@
 use std::thread;
 use std::sync::{mpsc, Arc, Mutex};
 use std::time::Duration;
-
 use rand::{self, Rng};
 
 fn main() {
+
+    // --/> (Tarefa) Gerenciando Threads
+
+    let (transmissor, recepetor) = mpsc::channel::< (usize, i32) >();
+
+    let handles: Vec<_> = ( 0 .. 5 ).map( |i| {
+
+        let tx = transmissor.clone();
+
+        let h = thread::spawn( move || {
+            let mut rng = rand::thread_rng();
+            thread::sleep( Duration::from_secs(2) );
+            let value: i32 = rng.gen_range( 0 ..= 100 );
+            tx.send( (i, value * value) ).unwrap();
+        } );
+
+        h
+    } ).collect();
+
+    let mut values: Vec< (usize, i32) > = vec![];
+    handles.into_iter().for_each( |_| {
+
+        let value = recepetor.recv().unwrap();
+        values.push( value );
+
+    } );
+
+    println!( "{values:?}" );
+
+    println!();
+    // ----
+
 
     // --/> (Tarefa) Concorrencia com Valores Aleatorios
 
