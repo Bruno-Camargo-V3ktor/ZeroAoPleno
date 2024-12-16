@@ -1,6 +1,47 @@
 use std::thread;
+use std::sync::{mpsc, Arc, Mutex};
+use std::time::Duration;
 
 fn main() {
+
+    // --/> Canal de Comunicacao entre as Threads
+
+    //Criando um canal de comunicao(transmissor e receptor)
+    let (tx, rx) = mpsc::channel::<String>();
+
+    thread::spawn( move || {
+        let msg = String::from("Ola da thread 1");
+        println!( "{:?}", tx.send( msg ).unwrap() );
+    } );
+
+    let recebido = rx.recv().unwrap();
+    println!( "Mensagem recebida: {recebido}" );
+
+    // Criando um contador compartilhado com Arc e Mutex
+    let contador = Arc::new( Mutex::new(0) );
+
+    let mut handles = vec![];
+
+    for i in 0..10 {
+        //Criando uma referencia compartilhada usando Arc
+        let c = Arc::clone( &contador );
+
+        let h = thread::spawn(move || {
+            let mut value = c.lock().unwrap();
+            //println!( "{value} || {i}" );
+            *value += i;
+        });
+
+        handles.push( h );
+    }
+
+    // Aguardando todas as threads terminarem
+    for h in handles { h.join().unwrap(); }
+
+    println!( "Contador: {}", contador.lock().unwrap() );
+
+    println!();
+    // ----
 
 
     // --/> Encadeamento de Threads
