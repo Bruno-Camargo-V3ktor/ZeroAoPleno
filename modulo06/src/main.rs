@@ -1,9 +1,30 @@
 use std::thread;
 use std::sync::{mpsc, Arc, Mutex};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use rand::{self, Rng};
+use rayon::prelude::*;
 
 fn main() {
+
+    // --/> Metodos Sequencias e Paraleros
+
+    let numeros = vec![1, 2, 3, 4, 5];
+
+    // Medindo o tempo da soma paralera
+    let start_par = Instant::now();
+    let soma_par: u32 = numeros.iter().par_bridge().sum(); // Soma paralera
+    let duration_par = start_par.elapsed();
+    println!( "Soma Sequencial: {soma_par}, (Tempo: {duration_par:?}) " );
+
+    // Medindo tempo da soma sequencial
+    let start_seq = Instant::now();
+    let soma_seq: u32 = numeros.iter().sum();
+    let duration_seq = start_seq.elapsed();
+    println!( "Soma Sequencial: {soma_seq}, (Tempo: {duration_seq:?}) " );
+
+    println!();
+    // ----
+
 
     // --/> (Tarefa) Gerenciando Threads
 
