@@ -6,6 +6,24 @@ use rayon::prelude::*;
 
 fn main() {
 
+    // --/> (Tarfea) Numeros Primos com Paralerimos
+
+    let numeros: Vec<u64> = (1 ..= 1_000_000).collect();
+
+    // Contagem Sequencial
+    let start = Instant::now();
+    let primos_seq: usize = numeros.iter().filter(|&&x| is_prime(x)).count();
+    println!("Sequencial: {} primos encontrados em {:?}", primos_seq, start.elapsed());
+
+    // Contagem Paralela
+    let start = Instant::now();
+    let primos_par: usize = numeros.par_iter().filter(|&&x| is_prime(x)).count();
+    println!("Paralelo: {} primos encontrados em {:?}", primos_par, start.elapsed());
+
+    println!();
+    // ----
+
+
     // --/> Metodos Sequencias e Paraleros
 
     let numeros = vec![1, 2, 3, 4, 5];
@@ -202,7 +220,18 @@ fn main() {
     println!("Thread principal");
 
     // ----
+}
 
+
+
+fn is_prime( num: u64 ) -> bool {
+    if num < 2 { return false }
+
+    for n in 2..=( (num as f64).sqrt() as u64 ) {
+        if num % n == 0 { return false }
+    }
+
+    true
 }
 
 fn hello_thread(id: i32) {
