@@ -8,3 +8,5 @@ rand = "*"
 rayon = "*"
 tokio = { version = "*", features=["full"] }
 reqwest = "*"
+anyhow = "*"
+comprimentos = { path = "../modulo06_bibliotecas/comprimentos" }

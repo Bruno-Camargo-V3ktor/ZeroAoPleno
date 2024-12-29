@@ -6,8 +6,20 @@ use std::thread;
 use std::time::{Duration, Instant};
 use tokio::time::{self, sleep};
 
+use comprimentos::cumprimentar_usuario;
+
 #[tokio::main]
 async fn main() {
+    // --/> Introducao a Bibliotecas
+
+    let result = cumprimentar_usuario();
+    match result {
+        Ok(user_name) => println!("Bem-Vindo, {user_name}!"),
+        Err(err) => eprintln!("Error: {err}"),
+    }
+
+    // ----
+
     // --/> (Tarefa) Execucao Assincrona
 
     let tarefa1 = tokio::spawn(tarefa(1, 3));
