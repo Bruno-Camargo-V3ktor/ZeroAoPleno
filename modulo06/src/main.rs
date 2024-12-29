@@ -8,8 +8,25 @@ use tokio::time::{self, sleep};
 
 use comprimentos::cumprimentar_usuario;
 
+use todo::ToDoList;
+
 #[tokio::main]
 async fn main() {
+    // --/> Biblioteca para To-Do-List
+
+    let mut todo_list = ToDoList::new();
+
+    todo_list.add_task("Lavar a louca");
+    todo_list.add_task("Dar banho na nina");
+    todo_list.add_task("Treinar");
+
+    let _ = todo_list.complete_task(1);
+
+    let tasks = todo_list.get_tasks();
+    println!("Tarefas: {tasks:?}");
+
+    // ----
+
     // --/> Introducao a Bibliotecas
 
     let result = cumprimentar_usuario();

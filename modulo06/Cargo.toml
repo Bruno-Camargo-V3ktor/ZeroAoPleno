@@ -10,3 +10,4 @@ tokio = { version = "*", features=["full"] }
 reqwest = "*"
 anyhow = "*"
 comprimentos = { path = "../modulo06_bibliotecas/comprimentos" }
+todo = { path = "../modulo06_bibliotecas/todo" }
