@@ -12,6 +12,16 @@ use todo::ToDoList;
 
 #[tokio::main]
 async fn main() {
+    // Tipo Generico de Dado
+    let x = 5;
+    let y = 10;
+    println!("O maior numero eh: {}", maior(x, y));
+
+    let x = "Bandecley";
+    let y = "Vina";
+    println!("O maior texto eh: {}", maior(x, y));
+    // ----
+
     // --/> Biblioteca para To-Do-List
 
     let mut todo_list = ToDoList::new();
@@ -282,6 +292,13 @@ async fn main() {
     println!("Thread principal");
 
     // ----
+}
+
+fn maior<T>(a: T, b: T) -> T
+where
+    T: Ord,
+{
+    if a > b { a } else { b }
 }
 
 async fn tarefa(id: u32, duracao: u64) {
