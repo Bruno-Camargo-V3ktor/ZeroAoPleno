@@ -17,7 +17,6 @@ impl<'a> StrSplit<'a> {
         }
     }
 }
-
 impl<'a> Iterator for StrSplit<'a> {
     type Item = &'a str;
 
