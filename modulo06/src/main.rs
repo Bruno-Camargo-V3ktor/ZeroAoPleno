@@ -18,12 +18,57 @@ struct Screen {
     pub components: Vec<Box<dyn Draw>>,
 }
 
+struct Rectangle {
+    pub height: f32,
+    pub width: f32,
+}
+
+struct Circle {
+    pub radius: f32,
+}
+
 // Impls
+impl Screen {
+    pub fn run(&self) {
+        for c in self.components.iter() {
+            c.draw();
+        }
+    }
+}
+
+impl Draw for Rectangle {
+    fn draw(&self) {
+        println!(
+            "Rectangle [ height: {}, width: {} ]",
+            self.height, self.width
+        )
+    }
+}
+
+impl Draw for Circle {
+    fn draw(&self) {
+        println!("Circle [ radius: {} ]", self.radius)
+    }
+}
 
 #[tokio::main]
 async fn main() {
     // Objetos de Trait
+    let screen = Screen {
+        components: vec![
+            Box::new(Rectangle {
+                height: 1.0,
+                width: 2.0,
+            }),
+            Box::new(Circle { radius: 5.0 }),
+            Box::new(Rectangle {
+                height: 10.0,
+                width: 4.0,
+            }),
+        ],
+    };
 
+    screen.run();
     // ----
 
     // Tipo Generico de Dado
