@@ -45,3 +45,41 @@ impl Repositorio<f64> {
     }
 }
 */
+
+pub trait Summary {
+    fn summarize(&self) -> String;
+
+    fn create_news(title: &str, content: &str) -> News {
+        News {
+            title: title.to_string(),
+            content: content.to_string(),
+        }
+    }
+}
+
+impl Summary for &str {
+    fn summarize(&self) -> String {
+        format!("# Breaking news! The message is :{}", self)
+    }
+}
+
+impl Summary for String {
+    fn summarize(&self) -> String {
+        format!("@ Breaking news! The message is :{}", self)
+    }
+}
+
+impl Summary for News {
+    fn summarize(&self) -> String {
+        format!("-- Breaking news! '{}' : {}", self.title, self.content)
+    }
+}
+
+pub struct News {
+    title: String,
+    content: String,
+}
+
+pub fn notify<T: Summary>(item: &T) {
+    println!("{}", item.summarize());
+}
