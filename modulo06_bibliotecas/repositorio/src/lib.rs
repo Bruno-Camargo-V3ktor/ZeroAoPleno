@@ -12,7 +12,28 @@ impl<T> Repositorio<T> {
     }
 }
 
-impl Repositorio<i32> {
+impl<T: std::ops::Add<Output = T> + std::ops::Mul<Output = T> + Copy + Default> Repositorio<T> {
+    pub fn total(&self) -> T {
+        self.dados
+            .iter()
+            .copied()
+            .fold(T::default(), |acc, x| acc + x)
+    }
+
+    pub fn produto(&self) -> T {
+        let mut init = 0;
+        self.dados.iter().copied().fold(T::default(), |acc, x| {
+            if init == 0 {
+                init = 1;
+                acc + x
+            } else {
+                acc * x
+            }
+        })
+    }
+}
+
+/*impl Repositorio<i32> {
     pub fn total(&self) -> i32 {
         self.dados.iter().sum()
     }
@@ -23,3 +44,4 @@ impl Repositorio<f64> {
         self.dados.iter().product()
     }
 }
+*/
