@@ -1,17 +1,31 @@
+use comprimentos::cumprimentar_usuario;
 use rand::{self, Rng};
 use rayon::prelude::*;
 use reqwest::Error;
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
+use todo::ToDoList;
 use tokio::time::{self, sleep};
 
-use comprimentos::cumprimentar_usuario;
+// Traits
+trait Draw {
+    fn draw(&self);
+}
 
-use todo::ToDoList;
+// Structs
+struct Screen {
+    pub components: Vec<Box<dyn Draw>>,
+}
+
+// Impls
 
 #[tokio::main]
 async fn main() {
+    // Objetos de Trait
+
+    // ----
+
     // Tipo Generico de Dado
     let x = 5;
     let y = 10;
