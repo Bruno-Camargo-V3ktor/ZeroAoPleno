@@ -88,6 +88,28 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+    // Emprestimos / Movendo valores em Closures
+    let example_closure = |x| x;
+    let _s = example_closure(String::from("hello"));
+    //let v = example_closure(3); // Nao pode pos a Closure ja inferiu a tipagem
+
+    let mut list = vec![1, 2, 3];
+    println!("Antes da closure: {:?}", list);
+    let mut only_borrows = || list.push(4);
+    only_borrows();
+    println!("Depois da closure: {:?}", list);
+
+    let list = vec![4, 5, 6];
+    println!("Antes da closure: {:?}", list);
+
+    thread::spawn(move || println!("From thread: {:?}", list))
+        .join()
+        .unwrap();
+
+    println!("Depois da closure: --- a lista nao existe mais pois foi movida");
+
+    // ----
+
     // Introducao a Closures (Funcoes anonimais)
     let store = Inventory {
         shirts: vec![ShirtColor::Blue, ShirtColor::Red, ShirtColor::Red],
