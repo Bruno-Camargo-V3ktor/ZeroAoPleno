@@ -27,6 +27,10 @@ struct Circle {
     pub radius: f32,
 }
 
+struct Inventory {
+    shirts: Vec<ShirtColor>,
+}
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -51,8 +55,60 @@ impl Draw for Circle {
     }
 }
 
+impl Inventory {
+    fn giveaway(&self, user_preference: Option<ShirtColor>) -> ShirtColor {
+        user_preference.unwrap_or_else(|| self.most_stocked())
+    }
+
+    fn most_stocked(&self) -> ShirtColor {
+        let mut red = 0;
+        let mut blue = 0;
+
+        for color in &self.shirts {
+            match color {
+                ShirtColor::Blue => blue += 1,
+                ShirtColor::Red => red += 1,
+            }
+        }
+
+        if red > blue {
+            ShirtColor::Red
+        } else {
+            ShirtColor::Blue
+        }
+    }
+}
+
+// Enums
+#[derive(Debug)]
+enum ShirtColor {
+    Red,
+    Blue,
+}
+
 #[tokio::main]
 async fn main() {
+    // Introducao a Closures (Funcoes anonimais)
+    let store = Inventory {
+        shirts: vec![ShirtColor::Blue, ShirtColor::Red, ShirtColor::Red],
+    };
+
+    let giveaway1 = store.giveaway(Some(ShirtColor::Red));
+    let giveaway2 = store.giveaway(None);
+
+    println!("{giveaway1:?}");
+    println!("{giveaway2:?}");
+
+    let expensive_clouse = |num| -> u32 {
+        println!("Calculor lento");
+        thread::sleep(Duration::from_secs(2));
+        num
+    };
+
+    expensive_clouse(12);
+
+    // ----
+
     // Objetos de Trait
     let screen = Screen {
         components: vec![
