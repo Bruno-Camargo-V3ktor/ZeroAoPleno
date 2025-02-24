@@ -33,6 +33,8 @@ struct Inventory {
 
 struct MyOption<T>(Option<T>);
 
+struct MyResult<T, E>(Result<T, E>);
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -93,6 +95,18 @@ impl<T> MyOption<T> {
     }
 }
 
+impl<T, E> MyResult<T, E> {
+    fn unwrap_or_else<F>(self, f: F) -> T
+    where
+        F: FnOnce(E) -> T,
+    {
+        match self.0 {
+            Ok(x) => x,
+            Err(e) => f(e),
+        }
+    }
+}
+
 // Enums
 #[derive(Debug)]
 enum ShirtColor {
@@ -102,6 +116,35 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+    // (Tarefa) Closure como Argurmento
+
+    let callback = |err| {
+        println!("Error: {err}");
+        0
+    };
+
+    let ok_value = MyResult::<i32, &str>(Result::Ok(10));
+    let result_ok = ok_value.unwrap_or_else(callback);
+    println!("Ok Value: {result_ok}");
+
+    let err_value = MyResult::<i32, &str>(Err("Error"));
+    let result_err = err_value.unwrap_or_else(callback);
+    println!("Err Value: {result_err}");
+
+    // ---
+
+    let fallback_value = || 42;
+
+    let some_value = MyOption(Some(10));
+    let result_some = some_value.unwrap_or_else(fallback_value);
+    println!("Res: {result_some}");
+
+    let some_value = MyOption(None);
+    let result_some = some_value.unwrap_or_else(fallback_value);
+    println!("Res: {result_some}");
+
+    // ---
+
     // Definindo uma clousure unwrap_or_else
 
     let fallback_value = || 42;
