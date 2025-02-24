@@ -31,6 +31,8 @@ struct Inventory {
     shirts: Vec<ShirtColor>,
 }
 
+struct MyOption<T>(Option<T>);
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -79,6 +81,18 @@ impl Inventory {
     }
 }
 
+impl<T> MyOption<T> {
+    fn unwrap_or_else<F>(self, f: F) -> T
+    where
+        F: FnOnce() -> T,
+    {
+        match self.0 {
+            Some(value) => value,
+            None => f(),
+        }
+    }
+}
+
 // Enums
 #[derive(Debug)]
 enum ShirtColor {
@@ -88,6 +102,20 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+    // Definindo uma clousure unwrap_or_else
+
+    let fallback_value = || 42;
+
+    let some_value = MyOption(Some(10));
+    let result_some = some_value.unwrap_or_else(fallback_value);
+    println!("Res: {result_some}");
+
+    let some_value = MyOption(None);
+    let result_some = some_value.unwrap_or_else(fallback_value);
+    println!("Res: {result_some}");
+
+    // ----
+
     // Emprestimos / Movendo valores em Closures
     let example_closure = |x| x;
     let _s = example_closure(String::from("hello"));
