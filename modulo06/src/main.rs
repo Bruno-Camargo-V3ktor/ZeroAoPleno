@@ -145,6 +145,17 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+    
+    // Introdução a Iteradores 
+    
+    let v1 = vec![1, 2, 3];
+    let v1_iter = v1.iter();
+
+    for val in v1_iter {
+        println!("Valores: {}", val);
+    }
+
+    // - - -
 
     // (Tarefa) Extensão para o Enum Option
         
