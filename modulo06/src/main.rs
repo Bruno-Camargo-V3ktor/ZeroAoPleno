@@ -13,6 +13,14 @@ trait Draw {
     fn draw(&self);
 }
 
+trait OptionExt<T> {
+    fn my_unwrap_or_else<F>(self, f: F) -> T 
+    where F: FnOnce() -> T;
+    
+    fn my_map<U, F>(self, f: F) -> Option<U>
+    where F: FnOnce(T) -> U; 
+}
+
 // Structs
 struct Screen {
     pub components: Vec<Box<dyn Draw>>,
@@ -107,6 +115,27 @@ impl<T, E> MyResult<T, E> {
     }
 }
 
+impl<T> OptionExt<T> for Option<T> {
+    fn my_unwrap_or_else<F>(self, f: F) -> T 
+        where F: FnOnce() -> T {
+        
+        match self {
+            Some(x) => x,
+            None => f()
+        }
+    }
+
+    fn my_map<U, F>(self, f: F) -> Option<U>
+        where F: FnOnce(T) -> U {
+        
+        match self {
+            Some(x) => Some( f(x) ),
+            None => None
+        }
+
+    }
+}
+
 // Enums
 #[derive(Debug)]
 enum ShirtColor {
@@ -116,6 +145,23 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+
+    // (Tarefa) Extensão para o Enum Option
+        
+        let clousure1 = || 2;
+        let option1_number: Option<i32> = None;
+        let result1 = option1_number.my_unwrap_or_else(clousure1);
+        println!("Resultado1: {result1}");    
+
+        let clousure2 = |v: i32| v * 2;
+        let option2_number: Option<i32> = Some(3);
+        let result2 = option2_number.my_map(clousure2);
+        println!("Resultado2: {result2:?}");
+
+    // - - -
+
+
+
     // (Tarefa) Soma Parcial com Closures
     let numbers = vec![
         1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2,
