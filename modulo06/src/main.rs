@@ -43,6 +43,12 @@ struct MyOption<T>(Option<T>);
 
 struct MyResult<T, E>(Result<T, E>);
 
+#[derive(Debug)]
+struct Shoe {
+    size: u32,
+    style: String,
+}
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -52,7 +58,7 @@ impl Screen {
     }
 }
 
-impl Draw for Rectangle {
+impl Draw for Rectangle { 
     fn draw(&self) {
         println!(
             "Rectangle [ height: {}, width: {} ]",
@@ -146,6 +152,39 @@ enum ShirtColor {
 #[tokio::main]
 async fn main() {
     
+    // Iteradores Parte 2
+        
+    let shoes1 = vec![ 
+        Shoe{ size: 40, style: "Sapatenis".to_string() }, 
+        Shoe{ size: 38, style: "Sapato".to_string() },
+        Shoe{ size: 40, style: "Tenis".to_string() }
+    ]; 
+    
+    let in_my_size = shoes_in_size(shoes1, 40);
+    println!( "{in_my_size:?}" );
+
+    // - - -
+
+
+    // Iteradores Parte 1
+    
+    let v1 = vec![1, 2, 3];
+    let v1_iter = v1.iter();
+
+    let total1: i32 = v1_iter.sum();
+    //let total2: i32 = v1_iter.sum(); -> Não funciona pois o iterado ja foi consumido
+    assert_eq!(total1, 6);
+    
+    let v2 = vec![3, 4, 5];
+    let mut v2_map = v2.iter().map(|x| *x*2);
+
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+
+    // - - -
+
     // Introdução a Iteradores 
     
     let v1 = vec![1, 2, 3];
@@ -154,7 +193,7 @@ async fn main() {
     for val in v1_iter {
         println!("Valores: {}", val);
     }
-
+    
     // - - -
 
     // (Tarefa) Extensão para o Enum Option
@@ -705,6 +744,10 @@ async fn main() {
     println!("Thread principal");
 
     // ----
+}
+
+fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
+    shoes.into_iter().filter(|s| s.size == shoe_size).collect()
 }
 
 fn maior<T>(a: T, b: T) -> T
