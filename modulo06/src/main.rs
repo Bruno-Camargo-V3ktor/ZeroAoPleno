@@ -1,8 +1,10 @@
 use comprimentos::cumprimentar_usuario;
+use ordinal::Ordinal;
 use rand::{self, Rng};
 use rayon::prelude::*;
 use reqwest::Error;
 use tokio::io::BufReader;
+use std::collections::BTreeSet;
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -62,6 +64,13 @@ struct CharInfo {
 struct CommandDef {
     path: String,
     attrs: Vec<String>
+}
+
+#[derive(Debug)]
+struct Book {
+    title: String,
+    author: String,
+    year: u32,
 }
 
 // Impls
@@ -157,6 +166,45 @@ impl<T> OptionExt<T> for Option<T> {
     }
 }
 
+impl Book {
+    fn century(&self) -> u32 {
+        (self.year - 1) / 100 + 1 
+    }
+
+    fn collection() -> Vec<Book> {
+        vec![
+            Book {
+                title: String::from("Book 1"),
+                author: String::from("Author 1"),
+                year: 1875
+            },
+            
+            Book {
+                title: String::from("Book 2"),
+                author: String::from("Author"),
+                year: 1950
+            },
+
+            Book {
+                title: String::from("Book 3"),
+                author: String::from("Author 3"),
+                year: 1802
+            },
+
+            Book {
+                title: String::from("Book 4"),
+                author: String::from("Auhtor 4"),
+                year: 1987
+            },
+            Book {
+                title: String::from("Book 5"),
+                author: String::from("Author 5"),
+                year: 1901,
+            },
+        ]
+    }
+}
+
 // Enums
 #[derive(Debug)]
 enum ShirtColor {
@@ -167,6 +215,33 @@ enum ShirtColor {
 #[tokio::main]
 async fn main() {
     
+    // (Tarefa) Ordenação de Livros
+    
+    let books = Book::collection();
+    
+    books.iter()
+        .map(Book::century)
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .for_each( |c| {
+            println!("Books from the {} centaury", Ordinal(c));
+            books.iter()
+                .enumerate()
+                .map( |(ix, b)| if b.century() == c { Some((ix + 1, b)) } else { None } )
+                .for_each( |op| {
+                    match op {
+                        Some((id, book)) => {
+                            println!("#{}: {:?}", id, book);
+                        }
+
+                        _ => {}
+                    } 
+                });
+        } );
+
+    // - - - 
+
+
     // (Tarefa) Manipulação De Estrutura
     
     let command_defs = vec![
