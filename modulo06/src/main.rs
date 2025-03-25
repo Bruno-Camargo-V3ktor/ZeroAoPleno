@@ -58,6 +58,12 @@ struct CharInfo {
     character: char
 }
 
+#[derive(Debug)]
+struct CommandDef {
+    path: String,
+    attrs: Vec<String>
+}
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -161,7 +167,31 @@ enum ShirtColor {
 #[tokio::main]
 async fn main() {
     
-    //
+    // (Tarefa) Manipulação De Estrutura
+    
+    let command_defs = vec![
+        CommandDef {
+            path: String::from("path1"),
+            attrs: vec![String::from("attr1"), String::from("attr2")]
+        },
+
+        CommandDef {
+            path: String::from("path2"),
+            attrs: vec![String::from("attr3"), String::from("attr4")]
+        },
+    ];
+    
+    let (paths, attrs): (Vec<String>, Vec<Vec<String>>) = command_defs.
+        into_iter()
+        .map( |def| (def.path, def.attrs) )
+        .unzip();
+    
+    println!("Paths: {:?}", paths);
+    println!("Attrs: {:?}", attrs);
+
+    // - - -
+
+    // (Tarefa) Manipulação De Arquivo
     let file = File::open("input.txt").unwrap();
     let reader = io::BufReader::new(file);
 
