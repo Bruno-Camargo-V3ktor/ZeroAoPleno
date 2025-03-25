@@ -49,6 +49,12 @@ struct Shoe {
     style: String,
 }
 
+#[derive(Debug, Clone)]
+struct CharInfo {
+    index: usize,
+    character: char
+}
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -152,6 +158,19 @@ enum ShirtColor {
 #[tokio::main]
 async fn main() {
     
+    // (Tarefa) Manipulação De Caracteres
+        
+    let chars = vec!['A', 'B', 'C', 'D', 'E'];
+    let mut char_infos: Vec<CharInfo> = vec![];
+    let mut ix = 0;
+
+    chars.iter()
+        .map( | &ch | {  ix+=1; CharInfo{ index: ix, character: ch } } )
+        .rev()
+        .for_each( |info| { char_infos.push( info.clone() ); println!("INFO {:?}", info) } );
+
+    // - - -
+
     // Iteradores Parte 2
         
     let shoes1 = vec![ 
