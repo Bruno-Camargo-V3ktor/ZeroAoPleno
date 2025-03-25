@@ -2,11 +2,14 @@ use comprimentos::cumprimentar_usuario;
 use rand::{self, Rng};
 use rayon::prelude::*;
 use reqwest::Error;
+use tokio::io::BufReader;
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use todo::ToDoList;
 use tokio::time::{self, sleep};
+use std::fs::File;
+use std::io::{self, BufRead, ErrorKind};
 
 // Traits
 trait Draw {
@@ -158,6 +161,37 @@ enum ShirtColor {
 #[tokio::main]
 async fn main() {
     
+    //
+    let file = File::open("input.txt").unwrap();
+    let reader = io::BufReader::new(file);
+
+    let rest_of_the_first_group: io::Result<Vec<_>> = reader
+        .lines()
+        .enumerate()
+        .take_while( |(_, line)| match line {
+            Ok(l) => !l.is_empty(),
+            _ => true,
+        } )
+        .map( |(index, line)| {
+            line.map_err(|e| {
+                io::Error::new(ErrorKind::Other, format!("Error reading line! {} : {}", index + 1, e))
+            })
+        } )
+        .collect();
+    
+    match rest_of_the_first_group {
+        Ok(lines) => {
+            println!("Rest of the first group");
+            for line in &lines { println!("PRINT: {:?}", line) }
+        }
+
+        Err(e) => {
+            eprintln!("Eror reading file: {}", e);
+        }
+    }
+
+    // - - -
+
     // (Tarefa) Manipulação De Caracteres
         
     let chars = vec!['A', 'B', 'C', 'D', 'E'];
