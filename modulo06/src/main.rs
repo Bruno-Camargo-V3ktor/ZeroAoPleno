@@ -1,16 +1,29 @@
 use comprimentos::cumprimentar_usuario;
+use ordinal::Ordinal;
 use rand::{self, Rng};
 use rayon::prelude::*;
 use reqwest::Error;
+use tokio::io::BufReader;
+use std::collections::BTreeSet;
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::{Duration, Instant};
 use todo::ToDoList;
 use tokio::time::{self, sleep};
+use std::fs::File;
+use std::io::{self, BufRead, ErrorKind};
 
 // Traits
 trait Draw {
     fn draw(&self);
+}
+
+trait OptionExt<T> {
+    fn my_unwrap_or_else<F>(self, f: F) -> T 
+    where F: FnOnce() -> T;
+    
+    fn my_map<U, F>(self, f: F) -> Option<U>
+    where F: FnOnce(T) -> U; 
 }
 
 // Structs
@@ -35,6 +48,31 @@ struct MyOption<T>(Option<T>);
 
 struct MyResult<T, E>(Result<T, E>);
 
+#[derive(Debug)]
+struct Shoe {
+    size: u32,
+    style: String,
+}
+
+#[derive(Debug, Clone)]
+struct CharInfo {
+    index: usize,
+    character: char
+}
+
+#[derive(Debug)]
+struct CommandDef {
+    path: String,
+    attrs: Vec<String>
+}
+
+#[derive(Debug)]
+struct Book {
+    title: String,
+    author: String,
+    year: u32,
+}
+
 // Impls
 impl Screen {
     pub fn run(&self) {
@@ -44,7 +82,7 @@ impl Screen {
     }
 }
 
-impl Draw for Rectangle {
+impl Draw for Rectangle { 
     fn draw(&self) {
         println!(
             "Rectangle [ height: {}, width: {} ]",
@@ -107,6 +145,66 @@ impl<T, E> MyResult<T, E> {
     }
 }
 
+impl<T> OptionExt<T> for Option<T> {
+    fn my_unwrap_or_else<F>(self, f: F) -> T 
+        where F: FnOnce() -> T {
+        
+        match self {
+            Some(x) => x,
+            None => f()
+        }
+    }
+
+    fn my_map<U, F>(self, f: F) -> Option<U>
+        where F: FnOnce(T) -> U {
+        
+        match self {
+            Some(x) => Some( f(x) ),
+            None => None
+        }
+
+    }
+}
+
+impl Book {
+    fn century(&self) -> u32 {
+        (self.year - 1) / 100 + 1 
+    }
+
+    fn collection() -> Vec<Book> {
+        vec![
+            Book {
+                title: String::from("Book 1"),
+                author: String::from("Author 1"),
+                year: 1875
+            },
+            
+            Book {
+                title: String::from("Book 2"),
+                author: String::from("Author"),
+                year: 1950
+            },
+
+            Book {
+                title: String::from("Book 3"),
+                author: String::from("Author 3"),
+                year: 1802
+            },
+
+            Book {
+                title: String::from("Book 4"),
+                author: String::from("Auhtor 4"),
+                year: 1987
+            },
+            Book {
+                title: String::from("Book 5"),
+                author: String::from("Author 5"),
+                year: 1901,
+            },
+        ]
+    }
+}
+
 // Enums
 #[derive(Debug)]
 enum ShirtColor {
@@ -116,6 +214,162 @@ enum ShirtColor {
 
 #[tokio::main]
 async fn main() {
+    
+    // (Tarefa) Ordenação de Livros
+    
+    let books = Book::collection();
+    
+    books.iter()
+        .map(Book::century)
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .for_each( |c| {
+            println!("Books from the {} centaury", Ordinal(c));
+            books.iter()
+                .enumerate()
+                .map( |(ix, b)| if b.century() == c { Some((ix + 1, b)) } else { None } )
+                .for_each( |op| {
+                    match op {
+                        Some((id, book)) => {
+                            println!("#{}: {:?}", id, book);
+                        }
+
+                        _ => {}
+                    } 
+                });
+        } );
+
+    // - - - 
+
+
+    // (Tarefa) Manipulação De Estrutura
+    
+    let command_defs = vec![
+        CommandDef {
+            path: String::from("path1"),
+            attrs: vec![String::from("attr1"), String::from("attr2")]
+        },
+
+        CommandDef {
+            path: String::from("path2"),
+            attrs: vec![String::from("attr3"), String::from("attr4")]
+        },
+    ];
+    
+    let (paths, attrs): (Vec<String>, Vec<Vec<String>>) = command_defs.
+        into_iter()
+        .map( |def| (def.path, def.attrs) )
+        .unzip();
+    
+    println!("Paths: {:?}", paths);
+    println!("Attrs: {:?}", attrs);
+
+    // - - -
+
+    // (Tarefa) Manipulação De Arquivo
+    let file = File::open("input.txt").unwrap();
+    let reader = io::BufReader::new(file);
+
+    let rest_of_the_first_group: io::Result<Vec<_>> = reader
+        .lines()
+        .enumerate()
+        .take_while( |(_, line)| match line {
+            Ok(l) => !l.is_empty(),
+            _ => true,
+        } )
+        .map( |(index, line)| {
+            line.map_err(|e| {
+                io::Error::new(ErrorKind::Other, format!("Error reading line! {} : {}", index + 1, e))
+            })
+        } )
+        .collect();
+    
+    match rest_of_the_first_group {
+        Ok(lines) => {
+            println!("Rest of the first group");
+            for line in &lines { println!("PRINT: {:?}", line) }
+        }
+
+        Err(e) => {
+            eprintln!("Eror reading file: {}", e);
+        }
+    }
+
+    // - - -
+
+    // (Tarefa) Manipulação De Caracteres
+        
+    let chars = vec!['A', 'B', 'C', 'D', 'E'];
+    let mut char_infos: Vec<CharInfo> = vec![];
+    let mut ix = 0;
+
+    chars.iter()
+        .map( | &ch | {  ix+=1; CharInfo{ index: ix, character: ch } } )
+        .rev()
+        .for_each( |info| { char_infos.push( info.clone() ); println!("INFO {:?}", info) } );
+
+    // - - -
+
+    // Iteradores Parte 2
+        
+    let shoes1 = vec![ 
+        Shoe{ size: 40, style: "Sapatenis".to_string() }, 
+        Shoe{ size: 38, style: "Sapato".to_string() },
+        Shoe{ size: 40, style: "Tenis".to_string() }
+    ]; 
+    
+    let in_my_size = shoes_in_size(shoes1, 40);
+    println!( "{in_my_size:?}" );
+
+    // - - -
+
+
+    // Iteradores Parte 1
+    
+    let v1 = vec![1, 2, 3];
+    let v1_iter = v1.iter();
+
+    let total1: i32 = v1_iter.sum();
+    //let total2: i32 = v1_iter.sum(); -> Não funciona pois o iterado ja foi consumido
+    assert_eq!(total1, 6);
+    
+    let v2 = vec![3, 4, 5];
+    let mut v2_map = v2.iter().map(|x| *x*2);
+
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+    println!("{:?}", v2_map.next());
+
+    // - - -
+
+    // Introdução a Iteradores 
+    
+    let v1 = vec![1, 2, 3];
+    let v1_iter = v1.iter();
+
+    for val in v1_iter {
+        println!("Valores: {}", val);
+    }
+    
+    // - - -
+
+    // (Tarefa) Extensão para o Enum Option
+        
+        let clousure1 = || 2;
+        let option1_number: Option<i32> = None;
+        let result1 = option1_number.my_unwrap_or_else(clousure1);
+        println!("Resultado1: {result1}");    
+
+        let clousure2 = |v: i32| v * 2;
+        let option2_number: Option<i32> = Some(3);
+        let result2 = option2_number.my_map(clousure2);
+        println!("Resultado2: {result2:?}");
+
+    // - - -
+
+
+
     // (Tarefa) Soma Parcial com Closures
     let numbers = vec![
         1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2, 4, 5, 6, 7, 8, 9, 10, 1, 2,
@@ -648,6 +902,10 @@ async fn main() {
     println!("Thread principal");
 
     // ----
+}
+
+fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
+    shoes.into_iter().filter(|s| s.size == shoe_size).collect()
 }
 
 fn maior<T>(a: T, b: T) -> T
